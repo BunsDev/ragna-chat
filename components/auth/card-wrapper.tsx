@@ -3,16 +3,18 @@ import { siteConfig } from "@/config"
 
 interface CardWrapperProps {
     children: React.ReactNode
+    headerLabel?: string
 }
-export const CardWrapper = ({children}:CardWrapperProps) => {
+export const CardWrapper = ({ children, headerLabel = `Start using ${siteConfig.name} for yourself or your team` }
+    : CardWrapperProps) => {
     return (
         <Card>
             <CardHeader>
-                <p className="text-muted-foreground">Start using {siteConfig.name} for yourself or your team</p>
-                </CardHeader>
-                <CardContent>
-                    {children}
-                </CardContent>
+                <p className="text-muted-foreground">{headerLabel}</p>
+            </CardHeader>
+            <CardContent>
+                {children}
+            </CardContent>
         </Card>
     )
 }

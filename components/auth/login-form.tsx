@@ -8,8 +8,11 @@ import { useForm } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/use-toast"
+import { login } from "@/actions/login"
 
 export const LoginForm = () => {
+    const { toast } = useToast()
     const [isPending, startTransition] = useTransition()
     const [showCode, setShowCode] = useState<boolean>(false)
     const form = useForm<z.infer<typeof LoginSchema>>({
@@ -19,14 +22,24 @@ export const LoginForm = () => {
             code: ""
         }
     })
-    const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
         startTransition(() => {
-            if (!values.code) setShowCode(true)
-            else {
-                console.log(values)
-                form.reset()
-                setShowCode(false)
-            }
+            login(values)
+                .then((data) => {
+                    if (data.error) {
+                        toast({
+                            title: data.error
+                        })
+                    }
+                    if (data.success) {
+                        toast({
+                            title: data.success
+                        })
+                    }
+                    if(data.code){
+                        setShowCode(true)
+                    }
+                })
         })
     }
     return (
