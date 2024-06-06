@@ -8,8 +8,8 @@ interface ProtectedNavbarProps {
 }
 export const ProtectedNavbar = ({user}:ProtectedNavbarProps) => {
   return (
-    <header className="flex items-center select-none">
-        <span className="mx-auto"><Link href={"/"}><Logo/></Link></span>
+    <header className="sm:px-5 sm:space-between flex items-center select-none">
+        <span className="md:mx-auto"><Link href={"/"}><Logo/></Link></span>
         <UserButton user={user}/>
     </header>
   )
