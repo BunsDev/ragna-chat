@@ -2,7 +2,7 @@
 import * as z from "zod"
 import { SettingsDeleteSchema } from "@/schemas"
 import { db } from "@/lib/db"
-import { sendDeleteCodeEmail } from "@/lib/mail"
+import { sendDeleteCodeEmail, sendDeleteSuccessEmail } from "@/lib/mail"
 import { generateDeleteCode } from "@/lib/delete-code"
 import { signOut } from "@/auth"
 import { getDeleteCodeByEmail } from "@/data"
@@ -38,6 +38,7 @@ export const deleteAccount = async (values: z.infer<typeof SettingsDeleteSchema>
 
         await db.user.delete({where:{email:email}})
         await db.deleteCode.deleteMany({where:{email:email}})
+        await sendDeleteSuccessEmail(email!)
         return {success: "Account deleted!"}
     }
     catch(error){

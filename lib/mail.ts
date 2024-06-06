@@ -58,3 +58,35 @@ export const sendDeleteCodeEmail = async (email:string,token:string) => {
         console.error(error)
     }
 }
+
+export const sendVerificationSuccessEmail = async (email:string) => {
+    const options = {
+        from: `"${siteConfig.name}" <${process.env.NODEMAILER_EMAIL}>`,
+        to: email,
+        subject: "Account verified!",
+        html: `<p>Your account has successfully been verified./p>`,
+    };
+
+    try {
+        await transporter.sendMail(options);
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+
+
+export const sendDeleteSuccessEmail = async (email:string) => {
+    const options = {
+        from: `"${siteConfig.name}" <${process.env.NODEMAILER_EMAIL}>`,
+        to: email,
+        subject: "Account deleted!",
+        html: `<p>Your account has successfully been deleted.</p>`,
+    };
+
+    try {
+        await transporter.sendMail(options);
+    } catch (error) {
+        console.error(error)
+    }
+}

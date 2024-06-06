@@ -2,6 +2,7 @@
 
 import { findUserByEmail, getVerificationTokenByToken } from "@/data"
 import { db } from "@/lib/db"
+import { sendVerificationSuccessEmail } from "@/lib/mail"
 
 export const newVerification = async (token: string) => {
     try {
@@ -30,7 +31,7 @@ export const newVerification = async (token: string) => {
         })
 
         await db.verificationToken.delete({ where: { id: existingToken.id } })
-
+        await sendVerificationSuccessEmail(existingToken.email)
         return { success: "Email verified!" }
     }
     catch (error) {
