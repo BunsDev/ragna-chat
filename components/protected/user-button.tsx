@@ -1,0 +1,33 @@
+"use client"
+import { Avatar,AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { HelpCircle, Settings, User as UserIcon } from "lucide-react"
+import { User } from "next-auth"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
+import { ExitIcon } from "@radix-ui/react-icons"
+import { signOut } from "next-auth/react"
+import Link from "next/link"
+
+interface UserButtonProps {
+    user?: User
+}
+export const UserButton = ({ user }: UserButtonProps) => {
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger>
+                <Avatar>
+                    <AvatarImage src={user?.image || ""} />
+                    <AvatarFallback><UserIcon size={25} /></AvatarFallback>
+                </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild><Link href={"/settings"} className="flex gap-x-2" ><Settings/>Settings</Link></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href={"/faq"} className="flex gap-x-2" ><HelpCircle/>Help</Link></DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild><Button className="w-full flex gap-x-2" onClick={()=>signOut()}>Signout <ExitIcon/></Button></DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu >
+    )
+}

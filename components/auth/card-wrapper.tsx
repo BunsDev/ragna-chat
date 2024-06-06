@@ -10,7 +10,7 @@ export const CardWrapper = ({ children, headerLabel = `Start using ${siteConfig.
     return (
         <Card>
             <CardHeader>
-                <p className="text-muted-foreground">{headerLabel}</p>
+                <p className="text-muted-foreground text-sm font-semibold text-center">{headerLabel}</p>
             </CardHeader>
             <CardContent>
                 {children}

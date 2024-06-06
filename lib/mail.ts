@@ -34,7 +34,22 @@ export const sendLoginCodeEmail = async (email:string,token:string) => {
         from: `"${siteConfig.name}" <${process.env.NODEMAILER_EMAIL}>`,
         to: email,
         subject: "Login Code",
-        html: `<p>Your Login code : ${token}</p>`,
+        html: `<p>Your Login Code : ${token}</p>`,
+    };
+
+    try {
+        await transporter.sendMail(options);
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const sendDeleteCodeEmail = async (email:string,token:string) => {
+    const options = {
+        from: `"${siteConfig.name}" <${process.env.NODEMAILER_EMAIL}>`,
+        to: email,
+        subject: "Delete Conformation Code",
+        html: `<p>Your Delete Conformation Code : ${token}</p>`,
     };
 
     try {

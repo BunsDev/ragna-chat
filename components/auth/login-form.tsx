@@ -10,6 +10,7 @@ import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import { login } from "@/actions/login"
+import { BarLoader } from "react-spinners"
 
 export const LoginForm = () => {
     const { toast } = useToast()
@@ -74,8 +75,9 @@ export const LoginForm = () => {
                             )}
                         />
                     )}
-                    <Button>
-                        {!showCode ? "Continue with email" : "Login"}
+                    <Button type="submit" disabled={isPending}>
+                        {!isPending && ( !showCode ? "Continue with email" : "Login")}
+                        {isPending && (<BarLoader className="invert dark:invert-0"/>)}
                     </Button>
                 </form>
             </Form>
