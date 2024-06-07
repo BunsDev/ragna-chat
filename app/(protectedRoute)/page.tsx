@@ -1,17 +1,16 @@
-import { currentUser } from "@/lib/auth"
+// import { openRouter } from "@/actions/openrouter"
+import { Testing }  from "@/components/text"
+// import { currentUser } from "@/lib/auth"
 
 const HomePage = async () => {
-  const user = await currentUser()
+  // const user = await currentUser()
+  // const responce= await openRouter()
+  // console.log(responce)
   return (
     <main className="min-h-screen flex justify-center items-center">
       <section>
-        <h1>Home Page</h1>
-        {!!user && (
-          <>
-            <p>{user.name || "no name"}</p>
-            <p>{user.email}</p>
-          </>
-        )}
+        {/* {`${responce.role}: ${responce.content}`} */}
+        <Testing/>
       </section>
     </main>
   )
