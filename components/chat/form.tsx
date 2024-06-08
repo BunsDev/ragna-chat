@@ -36,9 +36,8 @@ export const ChatBotForm = ({ onSubmit, isPending }: ChatBoxFormProps) => {
     }
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === "Enter" && !e.shiftKey) {
+        if (e.key === "Enter" && !e.shiftKey && window.innerWidth > 768) {
             form.handleSubmit(onSubmitHandler)()
-            form.reset()
         }
     }
     return (

@@ -3,7 +3,7 @@ import { ChatBotSchema } from "@/schemas"
 import { ChatBotForm } from "./form"
 import * as z from "zod"
 import { User } from "next-auth"
-import { useRef, useState, useTransition } from "react"
+import { useMemo, useRef, useState, useTransition } from "react"
 import { ChatBotMessages } from "@/components/chat/messages"
 
 interface ChatBotComponentProps {
@@ -19,6 +19,7 @@ export interface Message {
 export const ChatBotComponent = ({ user }: ChatBotComponentProps) => {
 
     const [messages, setMessages] = useState<Message[]>([])
+    const memoizedMessages = useMemo(() => messages, [messages])
     const [updatingText, setUpdatingText] = useState<string>("")
     const [isFetching, setIsFetching] = useState<boolean>(false)
     const responseRef = useRef<string>("")
@@ -28,7 +29,7 @@ export const ChatBotComponent = ({ user }: ChatBotComponentProps) => {
     const fetchStream = async (newMessages: Message[]) => {
         responseRef.current = ""
         setIsFetching(true);
-        console.log({newMessages})
+        // console.log({newMessages})
         try {
             const response = await fetch('/api/chat/response', { // Replace '/api/your-endpoint' with your actual endpoint
                 method: 'POST',
@@ -52,7 +53,7 @@ export const ChatBotComponent = ({ user }: ChatBotComponentProps) => {
 
             setIsFetching(false)
             setUpdatingText("")
-            console.log({ message: responseRef.current, messages: messages })
+            // console.log({ message: responseRef.current, messages: messages })
             setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: responseRef.current }])
         } catch (e) {
             console.error("Error fetching response:", e);
@@ -77,7 +78,7 @@ export const ChatBotComponent = ({ user }: ChatBotComponentProps) => {
     return (
         <div className="relative flex flex-col">
             <div className="flex-1 overflow-y-auto p-4">
-                <ChatBotMessages response={updatingText} messages={messages} />
+                <ChatBotMessages response={updatingText} messages={memoizedMessages} />
             </div>
             <div className="sticky bottom-0 p-4">
                 <ChatBotForm onSubmit={onSubmit} isPending={isFetching} />

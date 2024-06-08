@@ -55,7 +55,6 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                     <SyntaxHighlighter
                                                         {...rest}
                                                         PreTag="div"
-                                                        children={String(children).replace(/\n$/, '')}
                                                         language={match[1]}
                                                         style={oneDark}
                                                         ref={node => {
@@ -63,7 +62,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                                 // Do something with the ref if needed
                                                             }
                                                         }}
-                                                    />
+                                                    >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
                                                 ) : (
                                                     <code {...rest} className={className}>
                                                         {children}
@@ -91,7 +90,6 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                             <SyntaxHighlighter
                                                 {...rest}
                                                 PreTag="div"
-                                                children={String(children).replace(/\n$/, '')}
                                                 language={match[1]}
                                                 style={oneDark}
                                                 ref={node => {
@@ -99,7 +97,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                         // Do something with the ref if needed
                                                     }
                                                 }}
-                                            />
+                                            >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
                                         ) : (
                                             <code {...rest} className={className}>
                                                 {children}

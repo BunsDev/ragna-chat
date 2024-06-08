@@ -5,7 +5,7 @@ if (!process.env.OPENROUTER_API_KEY) throw new Error("Missing OPEN ROUTER API Ke
 
 export const POST = async (req:Request) => {
   const {newMessages} = await req.json();
-  console.log(newMessages)
+  // console.log(newMessages)
 
   if (!newMessages) return new Response("Missing prompt", { status: 400 });
   // console.log(prompt)
@@ -15,8 +15,8 @@ export const POST = async (req:Request) => {
   const decoder = new TextDecoder();
 
   const stream = await openRouter.chat.completions.create({
-    model: "google/gemma-7b-it:free",
-    max_tokens:3000,
+    model: "microsoft/phi-3-mini-128k-instruct:free",
+    max_tokens:1800,
     stream: true,
     messages: newMessages
   });
