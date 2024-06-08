@@ -16,7 +16,7 @@ export const POST = async (req:Request) => {
 
   const stream = await openRouter.chat.completions.create({
     model: "google/gemma-7b-it:free",
-    // max_tokens:180,
+    max_tokens:3000,
     stream: true,
     messages: newMessages
   });

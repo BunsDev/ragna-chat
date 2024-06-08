@@ -3,7 +3,7 @@ import { ChatBotSchema } from "@/schemas"
 import { ChatBotForm } from "./form"
 import * as z from "zod"
 import { User } from "next-auth"
-import { useEffect, useRef, useState, useTransition } from "react"
+import { useRef, useState, useTransition } from "react"
 import { ChatBotMessages } from "@/components/chat/messages"
 
 interface ChatBotComponentProps {
@@ -67,7 +67,6 @@ export const ChatBotComponent = ({ user }: ChatBotComponentProps) => {
             content: values.prompt,
             name: user?.name
         }
-
         setMessages((prevMessages) => [...prevMessages, userMessage])
 
         startTransition(() => {
@@ -81,7 +80,7 @@ export const ChatBotComponent = ({ user }: ChatBotComponentProps) => {
                 <ChatBotMessages response={updatingText} messages={messages} />
             </div>
             <div className="sticky bottom-0 p-4">
-                <ChatBotForm onSubmit={onSubmit} isPending={isPending} />
+                <ChatBotForm onSubmit={onSubmit} isPending={isFetching} />
             </div>
         </div>
     )

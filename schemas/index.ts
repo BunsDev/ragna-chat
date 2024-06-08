@@ -22,5 +22,5 @@ export const SettingsDeleteSchema = z.object({
 })
 
 export const ChatBotSchema = z.object({
-    prompt: z.string().min(2, {message:"Minimum 2 Characters"}).max(100, {message:"Maximum 100 Characters"})
+    prompt: z.string().min(1, {message:"Minimum 1 Characters"}).max(3600, {message:"Maximum 3600 Characters"})
 })

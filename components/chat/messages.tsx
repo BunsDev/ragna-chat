@@ -2,6 +2,9 @@ import { Message } from "@/components/chat/chat-bot"
 import { useEffect, useRef } from "react"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { FaRobot } from "react-icons/fa"
+import Markdown from 'react-markdown'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 interface ChatBotMessagesProps {
     messages?: Message[]
@@ -15,7 +18,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
         if (endMessageRef.current) {
             endMessageRef.current.scrollIntoView({ behavior: 'smooth' })
         }
-    }, [messages])
+    }, [messages,response])
 
     if (messages?.length === 0 || !messages) {
         return (
@@ -26,7 +29,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
         )
     }
     return (
-        <div className="flex h-[calc(100vh-11rem)] flex-col gap-3">
+        <div className="flex w-full h-[calc(100vh-11rem)] flex-col gap-3">
             {messages.map((message, index) => {
                 if (message.role === "user") {
                     return (
@@ -39,20 +42,74 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                 }
                 if (message.role === "assistant") {
                     return (
-                        <div key={index} className="flex w-full">
+                        <div key={index} className="w-full">
                             <Card>
                                 <CardHeader><span className="flex gap-2 items-center">Ragna <FaRobot size={25} /></span></CardHeader>
-                                <CardContent>{message.content}</CardContent>
+                                <CardContent>
+                                    <Markdown
+                                        components={{
+                                            code(props) {
+                                                const { children, className, node, ...rest } = props
+                                                const match = /language-(\w+)/.exec(className || '')
+                                                return match ? (
+                                                    <SyntaxHighlighter
+                                                        {...rest}
+                                                        PreTag="div"
+                                                        children={String(children).replace(/\n$/, '')}
+                                                        language={match[1]}
+                                                        style={oneDark}
+                                                        ref={node => {
+                                                            if (node) {
+                                                                // Do something with the ref if needed
+                                                            }
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <code {...rest} className={className}>
+                                                        {children}
+                                                    </code>
+                                                )
+                                            }
+                                        }}
+                                    >{message.content}</Markdown></CardContent>
                             </Card>
                         </div>
                     )
                 }
             })}
             {response && (
-                <div className="flex w-full">
+                <div className="w-full">
                     <Card>
-                        <CardHeader><span className="flex gap-2 items-center">Ragna <FaRobot size={25} /></span></CardHeader>
-                        <CardContent>{response}</CardContent>
+                        <CardHeader><span className="flex gap-2 items-center">Ragna<FaRobot size={25} /></span></CardHeader>
+                        <CardContent>
+                            <Markdown
+                                components={{
+                                    code(props) {
+                                        const { children, className, node, ...rest } = props
+                                        const match = /language-(\w+)/.exec(className || '')
+                                        return match ? (
+                                            <SyntaxHighlighter
+                                                {...rest}
+                                                PreTag="div"
+                                                children={String(children).replace(/\n$/, '')}
+                                                language={match[1]}
+                                                style={oneDark}
+                                                ref={node => {
+                                                    if (node) {
+                                                        // Do something with the ref if needed
+                                                    }
+                                                }}
+                                            />
+                                        ) : (
+                                            <code {...rest} className={className}>
+                                                {children}
+                                            </code>
+                                        )
+                                    }
+                                }}
+                            >{response}
+                            </Markdown>
+                        </CardContent>
                     </Card>
                 </div>
             )}
