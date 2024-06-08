@@ -1,18 +1,16 @@
-// import { openRouter } from "@/actions/openrouter"
-import { Testing }  from "@/components/text"
-// import { currentUser } from "@/lib/auth"
+import { ChatBotComponent } from "@/components/chat/chat-bot"
+import { currentUser } from "@/lib/auth"
 
 const HomePage = async () => {
-  // const user = await currentUser()
-  // const responce= await openRouter()
-  // console.log(responce)
+  const user = await currentUser()
+
   return (
-    <main className="min-h-screen flex justify-center items-center">
-      <section>
-        {/* {`${responce.role}: ${responce.content}`} */}
-        <Testing/>
+      <section className="flex">
+        <div className="hidden md:block md:w-[20%] h-full">abc</div>
+        <div className="md:w-[80%] w-full h-full">
+          <ChatBotComponent user={user} />
+          </div>
       </section>
-    </main>
   )
 }
 export default HomePage

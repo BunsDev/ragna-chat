@@ -9,7 +9,7 @@ import { PencilIcon, TriangleAlertIcon, User2 } from "lucide-react"
 const SettingsPage = async () => {
     const user = await currentUser()
     return (
-        <main className="min-h-screen flex justify-center pt-[100px]">
+        <main className="flex justify-center pt-[100px]">
             <Tabs defaultValue="account" className="">
                 <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="account" className="flex items-center gap-2">Account <User2 size={15}/></TabsTrigger>

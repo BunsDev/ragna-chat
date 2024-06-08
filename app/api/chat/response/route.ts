@@ -1,20 +1,24 @@
+import { Message } from "@/components/chat/chat-bot";
 import { openRouter } from "@/lib/openrouter";
 
 if (!process.env.OPENROUTER_API_KEY) throw new Error("Missing OPEN ROUTER API Key");
 
 export const POST = async (req:Request) => {
-  const { prompt } = await req.json();
+  const {newMessages} = await req.json();
+  console.log(newMessages)
 
-  if (!prompt) return new Response("Missing prompt", { status: 400 });
+  if (!newMessages) return new Response("Missing prompt", { status: 400 });
+  // console.log(prompt)
+  
 
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
 
   const stream = await openRouter.chat.completions.create({
-    model: "meta-llama/llama-3-8b-instruct:free",
-    max_tokens:180,
+    model: "google/gemma-7b-it:free",
+    // max_tokens:180,
     stream: true,
-    messages: [{ role: "user", content: prompt }],
+    messages: newMessages
   });
 
   const readableStream = new ReadableStream({
