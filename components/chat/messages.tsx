@@ -7,6 +7,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { cn } from "@/lib/utils"
 import {Space_Mono } from "next/font/google"
+import { Inter } from "next/font/google"
 
 interface ChatBotMessagesProps {
     messages?: Message[]
@@ -16,6 +17,10 @@ const spaceMono = Space_Mono({
     subsets: ["latin"],
     style: ["normal", "italic"],
     weight: ["400", "700"],
+  })
+
+const inter = Inter({
+    subsets: ["latin"],
   })
 
 export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) => {
@@ -42,7 +47,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                     return (
                         <div key={index} className="flex justify-end">
                             <div className="p-2 border bg-foreground text-background rounded-lg max-w-[85%] md:max-w-[60%]">
-                                {message.content}
+                                <pre className={inter.className}>{message.content}</pre>
                             </div>
                         </div>
                     )

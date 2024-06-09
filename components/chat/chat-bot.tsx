@@ -29,7 +29,7 @@ export const ChatBotComponent = ({ chatId, dbMessages }: ChatBotComponentProps) 
         if (memoizedMessages?.length === 1) {
             fetchStream(memoizedMessages)
         }
-    }, [memoizedMessages])
+    }, [])
 
 
     const fetchStream = async (newMessages: Message[]) => {

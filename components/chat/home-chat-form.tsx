@@ -74,7 +74,7 @@ export const HomeChatBotForm = ({ userId }: HomeChatBotFormProps) => {
                                 <FormControl>
                                     <Textarea
                                         {...field}
-                                        placeholder="Enter your prompt"
+                                        placeholder="Create new chat..."
                                         className="min-h-[30px] h-auto resize-none pr-20 text-[16px] whitespace-pre-wrap"
                                         rows={1} // Initial rows
                                         ref={textareaRef}

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import { ChatButton } from "./chat-button"
+import { updateChatName } from "@/actions/update-chat-name"
 
 interface HomeChatListProps{
     chats: Chat[]
@@ -14,6 +15,7 @@ const HomeChatList = ({chats}:HomeChatListProps) => {
     const [chatsState, setChatsState] = useState<Chat[]>(chats || [])
     const router = useRouter()
     const { toast } = useToast()
+    
     const handleDelete = (chatId: string) => {
         startTransition(() => {
             deleteChat(chatId)
@@ -34,10 +36,37 @@ const HomeChatList = ({chats}:HomeChatListProps) => {
                 })
         })
     }
+
+    const handleNameChange = (chatId: string, name: string) => {
+        startTransition(() => {
+            updateChatName(chatId, name)
+                .then((data) => {
+                    if (data.success) {
+                        toast({
+                            title: data.success
+                        })
+                        const newChats = chatsState.map((chat) => {
+                            if (chat.id === chatId) {
+                                chat.name = name
+                            }
+                            return chat
+                        })
+                        setChatsState(newChats)
+                        router.refresh()
+                    }
+                    if (data.error) {
+                        toast({
+                            title: data.error
+                        })
+                    }
+                })
+        })
+    }
+
   return (
     <>
     {chatsState.map((chat,index) => (
-        <ChatButton key={index} chat={chat} handleDelete={handleDelete} isPending={isPending} />
+        <ChatButton handleNameChange={handleNameChange} key={index} chat={chat} handleDelete={handleDelete} isPending={isPending} />
     ))}
     </>
   )

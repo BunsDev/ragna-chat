@@ -2,30 +2,32 @@
 import { Chat } from "@prisma/client"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { usePathname } from "next/navigation"
+import { EditChatNameButton } from "@/components/chat/edit-chat-name-btn"
 
 interface ChatButtonProps {
     chat: Chat
     handleDelete: (chatId: string) => void
+    handleNameChange: (chatId: string, name: string) => void
     isPending: boolean
 }
-export const ChatButton = ({ chat, handleDelete, isPending }: ChatButtonProps) => {
+export const ChatButton = ({ chat, handleDelete,handleNameChange, isPending }: ChatButtonProps) => {
     const pathname = usePathname()
     const isCurrentChat = pathname === `/chat/${chat.id}`
     return (
-        <div className="flex items-center">
-            <Button className="w-fit" variant={`${isCurrentChat ? "default" : "link"}`} asChild>
+        <div className="grid grid-cols-8">
+            <Button className="col-span-6" variant={`${isCurrentChat ? "default" : "link"}`} asChild>
                 <Link href={`/chat/${chat.id}`}>
                     {chat.name || `untitled ${new Date(chat.updatedAt).toDateString()}`}
                 </Link>
             </Button>
+            <EditChatNameButton isPending={isPending} chatId={chat.id} handleNameChange={handleNameChange}/>
             {!isCurrentChat && (
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <Button variant="ghost"><TrashIcon /></Button>
+                        <Button size={"icon"} variant="ghost"><TrashIcon width={15} height={15} /></Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                         <AlertDialogHeader>

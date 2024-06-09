@@ -29,3 +29,7 @@ export const ChatBotSchema = z.object({
             message: "Prompt must not be empty or consist only of whitespace characters."
         })
 })
+
+export const EditChatNameSchema = z.object({
+    name: z.string().min(2, { message: "Minimum 2 Characters" }).max(30, { message: "Maximum 30 Characters" })
+})

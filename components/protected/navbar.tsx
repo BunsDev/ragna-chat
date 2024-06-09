@@ -17,7 +17,7 @@ export const ProtectedNavbar = ({ user,chats }: ProtectedNavbarProps) => {
   const pathname = usePathname()
   const isChatPath = pathname.startsWith("/chat/")
   return (
-    <header className={`justify-around ${isChatPath ? "" : "md:justify-normal"} flex items-center select-none`}>
+    <header className={`justify-between ${isChatPath ? "" : "md:justify-normal"} flex items-center select-none`}>
       {isChatPath && (
         <ChatSideBar user={user} chats={chats}/>
       )}

@@ -11,6 +11,17 @@ import { deleteChat } from "@/actions/delete-chat"
 import { startTransition, useState, useTransition } from "react"
 import { useToast } from "../ui/use-toast"
 import { usePathname, useRouter } from "next/navigation"
+import { updateChatName } from "@/actions/update-chat-name"
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
 
 interface ChatSideBarProps {
     user?: User
@@ -52,13 +63,30 @@ export const ChatSideBar = ({ user, chats }: ChatSideBarProps) => {
     }
 
     const handleNameChange = (chatId: string, name: string) => {
-        const newChats = chatsState.map((chat) => {
-            if (chat.id === chatId) {
-                chat.name = name
-            }
-            return chat
+        startTransition(() => {
+            updateChatName(chatId, name)
+                .then((data) => {
+                    if (data.success) {
+                        toast({
+                            title: data.success
+                        })
+                        const newChats = chatsState.map((chat) => {
+                            if (chat.id === chatId) {
+                                chat.name = name
+                            }
+                            return chat
+                        })
+                        setChatsState(newChats)
+                        router.refresh()
+                    }
+                    if (data.error) {
+                        toast({
+                            title: data.error
+                        })
+                    }
+                })
         })
-        setChatsState(newChats)
+
     }
     return (
         <Sheet>
@@ -69,13 +97,15 @@ export const ChatSideBar = ({ user, chats }: ChatSideBarProps) => {
                     <NewChatButton setChatsState={setChatsState} user={user!} />
                 </SheetHeader>
                 {!chats && <SheetDescription>No chats</SheetDescription>}
-                <ScrollArea className="h-[calc(100vh-10rem)] my-10">
-                    <div className="flex flex-col gap-2">
-                        {chatsState && chatsState.map((chat, index) => (
-                            <ChatButton isPending={isPending} key={index} chat={chat} handleDelete={handleDelete} />
+                {chatsState && (
+                    <ScrollArea className="h-[calc(100vh-10rem)] my-5">
+                        <div>
+                        {chatsState.map((chat, index) => (
+                                <ChatButton isPending={isPending} chat={chat} handleNameChange={handleNameChange} handleDelete={handleDelete} />
                         ))}
-                    </div>
-                </ScrollArea>
+                        </div>
+                    </ScrollArea>
+                )}
             </SheetContent>
         </Sheet>
     )

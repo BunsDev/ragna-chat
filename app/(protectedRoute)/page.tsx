@@ -11,7 +11,7 @@ const HomePage = async () => {
 
   return (
     <section className="flex justify-center">
-      <div className="w-[80%] h-full">
+      <div className="md:w-[80%] h-full">
         <div className="flex flex-col gap-10 justify-center">
           <HomeChatBotForm userId={user?.id!} />
           <Card>
