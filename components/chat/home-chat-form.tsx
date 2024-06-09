@@ -1,22 +1,28 @@
 "use client"
-import * as z from "zod"
-import { ChatBotSchema } from "@/schemas"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
-import { useRef } from "react"
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { ChatBotSchema } from "@/schemas"
+import * as z from "zod"
+import { useRef, useTransition } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { SendIcon } from "lucide-react"
 import { ClipLoader } from "react-spinners"
+import { makeNewChatwithValue } from "@/actions/new-chat-home"
+import { useRouter } from "next/navigation"
+import { useToast } from "@/components/ui/use-toast"
 
-interface ChatBoxFormProps {
-    onSubmit: (values: z.infer<typeof ChatBotSchema>) => void
-    isPending: boolean
+interface HomeChatBotFormProps {
+    userId: string
 }
 
-export const ChatBotForm = ({ onSubmit, isPending }: ChatBoxFormProps) => {
+export const HomeChatBotForm = ({ userId }: HomeChatBotFormProps) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null)
+    const { toast } = useToast()
+    const router = useRouter()
+    const [isPending, startTransition] = useTransition()
+
     const form = useForm<z.infer<typeof ChatBotSchema>>({
         resolver: zodResolver(ChatBotSchema),
         defaultValues: {
@@ -31,9 +37,22 @@ export const ChatBotForm = ({ onSubmit, isPending }: ChatBoxFormProps) => {
             textarea.style.height = `${Math.min(textarea.scrollHeight, 7 * 24)}px` // 24px per line, 7 lines max
         }
     }
+
     const onSubmitHandler = (values: z.infer<typeof ChatBotSchema>) => {
-        onSubmit(values)
-        form.reset()
+        startTransition(() => {
+            makeNewChatwithValue(values.prompt, userId)
+                .then((data) => {
+                    if (data.success) {
+                        router.push(`/chat/${data.chat.id}`)
+                    }
+                    if(data.error) {
+                        toast({
+                            title:data.error
+                        })
+                    }
+                })
+        })
+
     }
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

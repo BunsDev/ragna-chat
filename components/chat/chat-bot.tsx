@@ -2,28 +2,34 @@
 import { ChatBotSchema } from "@/schemas"
 import { ChatBotForm } from "./form"
 import * as z from "zod"
-import { User } from "next-auth"
-import { useMemo, useRef, useState, useTransition } from "react"
+import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { ChatBotMessages } from "@/components/chat/messages"
+import { newMessage } from "@/actions/new-message"
 
 interface ChatBotComponentProps {
-    user?: User
+    chatId: string
+    dbMessages?: Message[]
 }
 
 export interface Message {
-    role: "user" | "assistant" | "system"
+    role: "user" | "assistant" | "system" | string
     content: string
-    name?: string | null | undefined
 }
 
-export const ChatBotComponent = ({ user }: ChatBotComponentProps) => {
+export const ChatBotComponent = ({ chatId,dbMessages }: ChatBotComponentProps) => {
+    useEffect(()=>{
+        if(dbMessages?.length === 1){
+            fetchStream(dbMessages)
+        }
+    },[dbMessages])
 
-    const [messages, setMessages] = useState<Message[]>([])
+    const [messages, setMessages] = useState<Message[]>(dbMessages || [])
     const memoizedMessages = useMemo(() => messages, [messages])
     const [updatingText, setUpdatingText] = useState<string>("")
     const [isFetching, setIsFetching] = useState<boolean>(false)
     const responseRef = useRef<string>("")
     const [isPending, startTransition] = useTransition()
+
 
 
     const fetchStream = async (newMessages: Message[]) => {
@@ -55,6 +61,7 @@ export const ChatBotComponent = ({ user }: ChatBotComponentProps) => {
             setUpdatingText("")
             // console.log({ message: responseRef.current, messages: messages })
             setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: responseRef.current }])
+            newMessage(chatId, "assistant", responseRef.current)
         } catch (e) {
             console.error("Error fetching response:", e);
             setIsFetching(false);
@@ -66,21 +73,20 @@ export const ChatBotComponent = ({ user }: ChatBotComponentProps) => {
         const userMessage: Message = {
             role: "user",
             content: values.prompt,
-            name: user?.name
         }
         setMessages((prevMessages) => [...prevMessages, userMessage])
-
+        newMessage(chatId, "user", values.prompt)
         startTransition(() => {
-            fetchStream([...messages,{role: "user", content: values.prompt,name: user?.name}])
+            fetchStream([...messages,{role: "user", content: values.prompt}])
         })
     }
 
     return (
         <div className="relative flex flex-col">
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto py-4 md:p-4">
                 <ChatBotMessages response={updatingText} messages={memoizedMessages} />
             </div>
-            <div className="sticky bottom-0 p-4">
+            <div className="sticky bottom-0 py-4 md:p-4">
                 <ChatBotForm onSubmit={onSubmit} isPending={isFetching} />
             </div>
         </div>

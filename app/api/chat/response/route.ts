@@ -15,7 +15,7 @@ export const POST = async (req:Request) => {
   const decoder = new TextDecoder();
 
   const stream = await openRouter.chat.completions.create({
-    model: "microsoft/phi-3-mini-128k-instruct:free",
+    model: "gpt-3.5-turbo",
     max_tokens:1800,
     stream: true,
     messages: newMessages

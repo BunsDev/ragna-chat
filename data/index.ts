@@ -29,3 +29,30 @@ export const getVerificationTokenByEmail = async (email: string) => {
 export const getVerificationTokenByToken = async (token: string) => {
     return await db.verificationToken.findFirst({ where: { token } })
 }
+
+export const getAllChatsByUserId = async (userId: string) => {
+    return await db.chat.findMany({ where: { userId },
+        orderBy: { updatedAt: 'desc' } })
+}
+
+export const getChatById = async (id: string) => {
+    try {
+        return await db.chat.findFirst({ where: { id } })
+    } catch {
+        return null
+    }
+}
+
+export const getMessagesByChatId = async (chatId: string) => {
+    try {
+        return await db.message.findMany({
+            where: { chatId },
+            select: {
+                role: true,
+                content: true
+            }
+        })
+    } catch {
+        return null
+    }
+}

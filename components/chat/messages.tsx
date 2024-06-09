@@ -5,11 +5,18 @@ import { FaRobot } from "react-icons/fa"
 import Markdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { cn } from "@/lib/utils"
+import {Space_Mono } from "next/font/google"
 
 interface ChatBotMessagesProps {
     messages?: Message[]
     response?: string
 }
+const spaceMono = Space_Mono({
+    subsets: ["latin"],
+    style: ["normal", "italic"],
+    weight: ["400", "700"],
+  })
 
 export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) => {
     const endMessageRef = useRef<HTMLDivElement>(null)
@@ -22,7 +29,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
 
     if (messages?.length === 0 || !messages) {
         return (
-            <div className="flex h-[calc(100vh-11rem)] flex-col justify-center items-center">
+            <div className="flex h-[calc(100vh-11rem)] flex-col justify-center items-center select-none">
                 <h1 className="font-bold text-3xl text-center text-foreground/50">Chat with ragna</h1>
                 <p className="text-center font-semibold text-foreground/50">Ask me anything!</p>
             </div>
@@ -34,7 +41,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                 if (message.role === "user") {
                     return (
                         <div key={index} className="flex justify-end">
-                            <div className="p-2 border bg-foreground text-background rounded-lg max-w-[60%]">
+                            <div className="p-2 border bg-foreground text-background rounded-lg max-w-[85%] md:max-w-[60%]">
                                 {message.content}
                             </div>
                         </div>
@@ -44,7 +51,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                     return (
                         <div key={index} className="w-full">
                             <Card>
-                                <CardHeader><span className="flex gap-2 items-center">Ragna <FaRobot size={25} /></span></CardHeader>
+                                <CardHeader><span className="flex gap-2 items-center font-bold text-muted-foreground select-none border-b pb-1">Ragna <FaRobot size={25} /></span></CardHeader>
                                 <CardContent>
                                     <Markdown
                                         components={{
@@ -55,6 +62,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                     <SyntaxHighlighter
                                                         {...rest}
                                                         PreTag="div"
+                                                        className={cn(spaceMono.className,"text-[12px] md:text-base",className)}
                                                         language={match[1]}
                                                         style={oneDark}
                                                         ref={node => {
@@ -64,7 +72,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                         }}
                                                     >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
                                                 ) : (
-                                                    <code {...rest} className={className}>
+                                                    <code {...rest} className={cn(spaceMono.className,"bg-secondary",className)}>
                                                         {children}
                                                     </code>
                                                 )
@@ -79,7 +87,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
             {response && (
                 <div className="w-full">
                     <Card>
-                        <CardHeader><span className="flex gap-2 items-center">Ragna<FaRobot size={25} /></span></CardHeader>
+                        <CardHeader><span className="flex gap-2 items-center font-bold text-muted-foreground select-none border-b pb-1">Ragna<FaRobot size={25} /></span></CardHeader>
                         <CardContent>
                             <Markdown
                                 components={{
@@ -91,6 +99,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                 {...rest}
                                                 PreTag="div"
                                                 language={match[1]}
+                                                className={cn(spaceMono.className,"text-[12px] md:text-base",className)}
                                                 style={oneDark}
                                                 ref={node => {
                                                     if (node) {
@@ -99,7 +108,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                 }}
                                             >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
                                         ) : (
-                                            <code {...rest} className={className}>
+                                            <code {...rest} className={cn(spaceMono.className,"bg-secondary",className)}>
                                                 {children}
                                             </code>
                                         )
