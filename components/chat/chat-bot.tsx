@@ -16,12 +16,8 @@ export interface Message {
     content: string
 }
 
-export const ChatBotComponent = ({ chatId,dbMessages }: ChatBotComponentProps) => {
-    useEffect(()=>{
-        if(dbMessages?.length === 1){
-            fetchStream(dbMessages)
-        }
-    },[dbMessages])
+export const ChatBotComponent = ({ chatId, dbMessages }: ChatBotComponentProps) => {
+
 
     const [messages, setMessages] = useState<Message[]>(dbMessages || [])
     const memoizedMessages = useMemo(() => messages, [messages])
@@ -29,7 +25,11 @@ export const ChatBotComponent = ({ chatId,dbMessages }: ChatBotComponentProps) =
     const [isFetching, setIsFetching] = useState<boolean>(false)
     const responseRef = useRef<string>("")
     const [isPending, startTransition] = useTransition()
-
+    useEffect(() => {
+        if (memoizedMessages?.length === 1) {
+            fetchStream(memoizedMessages)
+        }
+    }, [memoizedMessages])
 
 
     const fetchStream = async (newMessages: Message[]) => {
@@ -77,7 +77,7 @@ export const ChatBotComponent = ({ chatId,dbMessages }: ChatBotComponentProps) =
         setMessages((prevMessages) => [...prevMessages, userMessage])
         newMessage(chatId, "user", values.prompt)
         startTransition(() => {
-            fetchStream([...messages,{role: "user", content: values.prompt}])
+            fetchStream([...messages, { role: "user", content: values.prompt }])
         })
     }
 
