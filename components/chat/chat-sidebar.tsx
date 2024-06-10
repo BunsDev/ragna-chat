@@ -22,6 +22,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select"
 
 interface ChatSideBarProps {
     user?: User
@@ -94,15 +95,30 @@ export const ChatSideBar = ({ user, chats }: ChatSideBarProps) => {
             <SheetContent side={"left"}>
                 <SheetHeader>
                     <SheetTitle><Logo /></SheetTitle>
-                    <NewChatButton setChatsState={setChatsState} user={user!} />
+                    <div>
+                        <NewChatButton setChatsState={setChatsState} user={user!} />
+                        <Select>
+                            <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Select A model" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Models</SelectLabel>
+                                    <SelectItem value="meta-llama/llama-3-8b-instruct:free">Meta llama</SelectItem>
+                                    <SelectItem value="microsoft/phi-3-mini-128k-instruct:free">Microsoft Phi</SelectItem>
+                                    <SelectItem value="google/gemini-flash-1.5">Google Gemini</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </SheetHeader>
                 {!chats && <SheetDescription>No chats</SheetDescription>}
                 {chatsState && (
                     <ScrollArea className="h-[calc(100vh-10rem)] my-5">
                         <div>
-                        {chatsState.map((chat, index) => (
+                            {chatsState.map((chat, index) => (
                                 <ChatButton key={index} isPending={isPending} chat={chat} handleNameChange={handleNameChange} handleDelete={handleDelete} />
-                        ))}
+                            ))}
                         </div>
                     </ScrollArea>
                 )}

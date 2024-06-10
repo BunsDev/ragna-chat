@@ -20,12 +20,12 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         if (!user) {
             await db.user.create({ data: { email: validatedFields.data.email } })
             const token = await generateVerificationToken(validatedFields.data.email)
-            sendVerificationEmail(validatedFields.data.email, token!)
+            await sendVerificationEmail(validatedFields.data.email, token!)
             return { success: "Verification link sent to your email!" }
         }
         if (!user.emailVerified) {
             const token = await generateVerificationToken(validatedFields.data.email)
-            sendVerificationEmail(validatedFields.data.email, token!)
+            await sendVerificationEmail(validatedFields.data.email, token!)
             return { error: "Verification link sent to your email!" }
         }
 
