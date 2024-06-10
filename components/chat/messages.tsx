@@ -6,7 +6,7 @@ import Markdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { cn } from "@/lib/utils"
-import {Space_Mono } from "next/font/google"
+import { Space_Mono } from "next/font/google"
 import { Inter } from "next/font/google"
 
 interface ChatBotMessagesProps {
@@ -17,11 +17,11 @@ const spaceMono = Space_Mono({
     subsets: ["latin"],
     style: ["normal", "italic"],
     weight: ["400", "700"],
-  })
+})
 
 const inter = Inter({
     subsets: ["latin"],
-  })
+})
 
 export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) => {
     const endMessageRef = useRef<HTMLDivElement>(null)
@@ -30,7 +30,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
         if (endMessageRef.current) {
             endMessageRef.current.scrollIntoView({ behavior: 'smooth' })
         }
-    }, [messages,response])
+    }, [messages, response])
 
     if (messages?.length === 0 || !messages) {
         return (
@@ -67,7 +67,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                     <SyntaxHighlighter
                                                         {...rest}
                                                         PreTag="div"
-                                                        className={cn(spaceMono.className,"text-[12px] md:text-base",className)}
+                                                        className={cn(spaceMono.className, "text-[12px] md:text-base", className)}
                                                         language={match[1]}
                                                         style={oneDark}
                                                         ref={node => {
@@ -77,13 +77,15 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                         }}
                                                     >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
                                                 ) : (
-                                                    <code {...rest} className={cn(spaceMono.className,"bg-secondary",className)}>
+                                                    <code {...rest} className={cn(spaceMono.className, "bg-secondary", className)}>
                                                         {children}
                                                     </code>
                                                 )
                                             }
-                                        }}
-                                    >{message.content}</Markdown></CardContent>
+                                        }}>
+                                        {message.content}
+                                    </Markdown>
+                                </CardContent>
                             </Card>
                         </div>
                     )
@@ -104,7 +106,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                 {...rest}
                                                 PreTag="div"
                                                 language={match[1]}
-                                                className={cn(spaceMono.className,"text-[12px] md:text-base",className)}
+                                                className={cn(spaceMono.className, "text-[12px] md:text-base", className)}
                                                 style={oneDark}
                                                 ref={node => {
                                                     if (node) {
@@ -113,7 +115,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                 }}
                                             >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
                                         ) : (
-                                            <code {...rest} className={cn(spaceMono.className,"bg-secondary",className)}>
+                                            <code {...rest} className={cn(spaceMono.className, "bg-secondary", className)}>
                                                 {children}
                                             </code>
                                         )

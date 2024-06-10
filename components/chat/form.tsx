@@ -72,7 +72,7 @@ export const ChatBotForm = ({ onSubmit, isPending }: ChatBoxFormProps) => {
                             disabled={isPending}
                             variant={"ghost"}
                         >
-                            {!isPending ? <SendIcon size={20} /> : <ClipLoader size={20} />}
+                            {!isPending ? <SendIcon size={20} /> : <ClipLoader className="dark:invert" size={20} />}
                         </Button>
                     </div>
                 </div>

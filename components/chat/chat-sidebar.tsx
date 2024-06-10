@@ -90,7 +90,7 @@ export const ChatSideBar = ({ user, chats }: ChatSideBarProps) => {
     }
     return (
         <Sheet>
-            <SheetTrigger><Button variant={"outline"}><HamburgerMenuIcon /></Button></SheetTrigger>
+            <SheetTrigger asChild><Button variant={"outline"}><HamburgerMenuIcon /></Button></SheetTrigger>
             <SheetContent side={"left"}>
                 <SheetHeader>
                     <SheetTitle><Logo /></SheetTitle>
@@ -101,7 +101,7 @@ export const ChatSideBar = ({ user, chats }: ChatSideBarProps) => {
                     <ScrollArea className="h-[calc(100vh-10rem)] my-5">
                         <div>
                         {chatsState.map((chat, index) => (
-                                <ChatButton isPending={isPending} chat={chat} handleNameChange={handleNameChange} handleDelete={handleDelete} />
+                                <ChatButton key={index} isPending={isPending} chat={chat} handleNameChange={handleNameChange} handleDelete={handleDelete} />
                         ))}
                         </div>
                     </ScrollArea>
