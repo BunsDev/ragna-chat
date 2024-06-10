@@ -12,16 +12,20 @@ const HomePage = async () => {
   return (
     <section className="flex justify-center">
       <div className="md:w-[80%] h-full">
-        <div className="flex flex-col gap-10 justify-center">
+        <div className="flex flex-col gap-10 justify-center h-[calc(100vh-5rem)] items-center">
+          <div className="flex flex-col justify-center text-center">
+            <h1 className="font-extrabold tracking-tighter text-3xl md:text-5xl">Universal Chat Assistant</h1>
+            <h3 className="fond-bold text-lg text-muted-foreground">Your Ultimate Multimodal AI Conversationalist</h3>
+          </div>
           <HomeChatBotForm userId={user?.id!} />
-          <Card>
+          {chats.length > 0 && (<Card>
             <CardHeader><h3 className="text-muted-foreground text-sm font-semibold text-center">Previous chats</h3></CardHeader>
             <CardContent className="flex justify-center items-center">
-              {chats.length > 0 ? (<ScrollArea className="h-auto max-h-[calc(80vh-10rem)] mx-auto my-5">
+              <ScrollArea className="h-auto max-h-[calc(80vh-10rem)] mx-auto my-5">
                 <HomeChatList chats={chats} />
-              </ScrollArea>) : (<><p>No chats found. Start a new chat!</p></>)}
+              </ScrollArea>
             </CardContent>
-          </Card>
+          </Card>)}
         </div>
       </div>
     </section>

@@ -28,7 +28,7 @@ export const ChatBotForm = ({ onSubmit, isPending }: ChatBoxFormProps) => {
         if (textareaRef.current) {
             const textarea = textareaRef.current
             textarea.style.height = 'auto' // Reset height to auto to correctly calculate new height
-            textarea.style.height = `${Math.min(textarea.scrollHeight, 7 * 24)}px` // 24px per line, 7 lines max
+            textarea.style.height = `${Math.min(textarea.scrollHeight, 7 * 16)}px` // 24px per line, 7 lines max
         }
     }
     const onSubmitHandler = (values: z.infer<typeof ChatBotSchema>) => {
