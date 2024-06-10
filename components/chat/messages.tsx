@@ -47,8 +47,10 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                 if (message.role === "user") {
                     return (
                         <div key={index} className="flex justify-end">
-                            <div className="p-2 border bg-foreground text-background rounded-lg max-w-[85%] md:max-w-[60%]">
-                                <pre className={inter.className}>{message.content}</pre>
+                            <div className="p-2 max-w-[85%] md:max-w-[60%] border bg-foreground text-background rounded-lg">
+                                <pre className={cn(inter.className, "overflow-x-auto whitespace-pre")}>
+                                    {message.content}
+                                </pre>
                             </div>
                         </div>
                     )
@@ -67,7 +69,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                 return match ? (
                                                     <HighlightedSyntax rest={rest} className={className} match={match}>
                                                         {String(children).replace(/\n$/, '')}
-                                                        </HighlightedSyntax>
+                                                    </HighlightedSyntax>
                                                 ) : (
                                                     <code {...rest} className={cn(spaceMono.className, "bg-secondary", className)}>
                                                         {children}
