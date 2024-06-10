@@ -8,6 +8,7 @@ import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { cn } from "@/lib/utils"
 import { Space_Mono } from "next/font/google"
 import { Inter } from "next/font/google"
+import { HighlightedSyntax } from "./highlighted-syntax"
 
 interface ChatBotMessagesProps {
     messages?: Message[]
@@ -41,7 +42,7 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
         )
     }
     return (
-        <div className="flex w-full h-[calc(100vh-11rem)] flex-col gap-3">
+        <div className="flex w-full h-[calc(100vh-11rem-1px)] flex-col gap-3">
             {messages.map((message, index) => {
                 if (message.role === "user") {
                     return (
@@ -64,18 +65,9 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                 const { children, className, node, ...rest } = props
                                                 const match = /language-(\w+)/.exec(className || '')
                                                 return match ? (
-                                                    <SyntaxHighlighter
-                                                        {...rest}
-                                                        PreTag="div"
-                                                        className={cn(spaceMono.className, "text-[12px] md:text-base", className)}
-                                                        language={match[1]}
-                                                        style={oneDark}
-                                                        ref={node => {
-                                                            if (node) {
-                                                                // Do something with the ref if needed
-                                                            }
-                                                        }}
-                                                    >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
+                                                    <HighlightedSyntax rest={rest} className={className} match={match}>
+                                                        {String(children).replace(/\n$/, '')}
+                                                        </HighlightedSyntax>
                                                 ) : (
                                                     <code {...rest} className={cn(spaceMono.className, "bg-secondary", className)}>
                                                         {children}
@@ -102,18 +94,33 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                         const { children, className, node, ...rest } = props
                                         const match = /language-(\w+)/.exec(className || '')
                                         return match ? (
-                                            <SyntaxHighlighter
-                                                {...rest}
-                                                PreTag="div"
-                                                language={match[1]}
-                                                className={cn(spaceMono.className, "text-[12px] md:text-base", className)}
-                                                style={oneDark}
-                                                ref={node => {
-                                                    if (node) {
-                                                        // Do something with the ref if needed
-                                                    }
-                                                }}
-                                            >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
+                                            <div className="relative">
+                                                {/* Copy button */}
+                                                <button
+                                                    className="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
+                                                    onClick={() => {
+                                                        // Handle copy functionality here
+                                                    }}
+                                                >
+                                                    Copy
+                                                </button>
+
+                                                {/* SyntaxHighlighter component */}
+                                                <SyntaxHighlighter
+                                                    {...rest}
+                                                    PreTag="div"
+                                                    language={match[1]}
+                                                    className={cn(spaceMono.className, "text-[12px] md:text-base", className)}
+                                                    style={oneDark}
+                                                    ref={node => {
+                                                        if (node) {
+                                                            // Do something with the ref if needed
+                                                        }
+                                                    }}
+                                                >
+                                                    {String(children).replace(/\n$/, '')}
+                                                </SyntaxHighlighter>
+                                            </div>
                                         ) : (
                                             <code {...rest} className={cn(spaceMono.className, "bg-secondary", className)}>
                                                 {children}
