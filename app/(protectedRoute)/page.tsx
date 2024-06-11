@@ -10,7 +10,7 @@ const HomePage = async () => {
   const chats = await getAllChatsByUserId(user?.id!)
 
   return (
-    <section className="flex justify-center">
+    <section className="gridbg flex justify-center">
       <div className="md:w-[80%] h-full">
         <div className="flex flex-col gap-10 justify-center h-[calc(100vh-5rem)] items-center">
           <div className="flex flex-col justify-center text-center">
@@ -18,14 +18,16 @@ const HomePage = async () => {
             <h3 className="fond-bold text-lg text-muted-foreground">Your Ultimate Multimodal AI Conversationalist</h3>
           </div>
           <HomeChatBotForm userId={user?.id!} />
-          {chats.length > 0 && (<Card>
-            <CardHeader><h3 className="text-muted-foreground text-sm font-semibold text-center">Previous chats</h3></CardHeader>
-            <CardContent className="flex justify-center items-center">
-              <ScrollArea className="h-auto max-h-[calc(80vh-10rem)] mx-auto my-5">
-                <HomeChatList chats={chats} />
-              </ScrollArea>
-            </CardContent>
-          </Card>)}
+          {chats.length > 0 && (
+              <Card>
+                <CardHeader><h3 className="text-muted-foreground text-sm font-semibold text-center">Previous chats</h3></CardHeader>
+                <CardContent className="flex justify-center items-center">
+                  <ScrollArea className="h-auto max-h-[calc(80vh-10rem)] mx-auto my-5">
+                    <HomeChatList chats={chats} />
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+          )}
         </div>
       </div>
     </section>

@@ -47,7 +47,8 @@ export const HomeChatBotForm = ({ userId }: HomeChatBotFormProps) => {
                     }
                     if(data.error) {
                         toast({
-                            title:data.error
+                            title:data.error,
+                            description:"If this continues please relogin and try again",
                         })
                     }
                 })
