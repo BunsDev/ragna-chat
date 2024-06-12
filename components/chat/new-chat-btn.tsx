@@ -8,6 +8,7 @@ import { Toast } from "../ui/toast"
 import { Chat } from "@prisma/client"
 import { BarLoader } from "react-spinners"
 import { useTransition } from "react"
+import { LucideMessageSquareText } from "lucide-react"
 
 interface NewChatButtonProps {
     user: User
@@ -37,6 +38,6 @@ export const NewChatButton = ({ user, setChatsState }: NewChatButtonProps) => {
 
     }
     return (
-        <Button onClick={handleClick}>{!isPending ? "New Chat" : (<BarLoader/>)}</Button>
+        <Button onClick={handleClick}>{!isPending ? (<span className="flex gap-2 items-center">New<LucideMessageSquareText/></span>) : (<BarLoader/>)}</Button>
     )
 }

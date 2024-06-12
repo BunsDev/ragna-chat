@@ -12,17 +12,10 @@ import { startTransition, useState, useTransition } from "react"
 import { useToast } from "../ui/use-toast"
 import { usePathname, useRouter } from "next/navigation"
 import { updateChatName } from "@/actions/update-chat-name"
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select"
+import { ModelDropdown } from "@/components/chat/model-dropdown"
+import { Separator } from "../ui/separator"
+
+
 
 interface ChatSideBarProps {
     user?: User
@@ -95,22 +88,11 @@ export const ChatSideBar = ({ user, chats }: ChatSideBarProps) => {
             <SheetContent side={"left"}>
                 <SheetHeader>
                     <SheetTitle><Logo /></SheetTitle>
-                    <div>
-                        <NewChatButton setChatsState={setChatsState} user={user!} />
-                        <Select>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Select A model" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Models</SelectLabel>
-                                    <SelectItem value="meta-llama/llama-3-8b-instruct:free">Meta llama</SelectItem>
-                                    <SelectItem value="microsoft/phi-3-mini-128k-instruct:free">Microsoft Phi</SelectItem>
-                                    <SelectItem value="google/gemini-flash-1.5">Google Gemini</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
+                    <Separator />
+                    <NewChatButton setChatsState={setChatsState} user={user!} />
+                    <Separator />
+                    <ModelDropdown />
+                    <Separator />
                 </SheetHeader>
                 {!chats && <SheetDescription>No chats</SheetDescription>}
                 {chatsState && (

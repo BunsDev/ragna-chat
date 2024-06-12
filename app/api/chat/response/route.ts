@@ -4,7 +4,7 @@ import { openRouter } from "@/lib/openrouter";
 if (!process.env.OPENROUTER_API_KEY) throw new Error("Missing OPEN ROUTER API Key");
 
 export const POST = async (req:Request) => {
-  const {newMessages} = await req.json();
+  const {newMessages,chatModel} = await req.json();
   // console.log(newMessages)
 
   if (!newMessages) return new Response("Missing prompt", { status: 400 });
@@ -15,10 +15,11 @@ export const POST = async (req:Request) => {
   const decoder = new TextDecoder();
 
   const stream = await openRouter.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: chatModel,
     max_tokens:1800,
     stream: true,
-    messages: newMessages
+    messages: newMessages,
+    temperature:0.7
   });
 
   const readableStream = new ReadableStream({

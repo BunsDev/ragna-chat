@@ -4,6 +4,7 @@ import { getAllChatsByUserId } from "@/data"
 import { currentUser } from "@/lib/auth"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { ModelDropdown } from "@/components/chat/model-dropdown"
 
 const HomePage = async () => {
   const user = await currentUser()
@@ -18,6 +19,7 @@ const HomePage = async () => {
             <h3 className="fond-bold text-lg text-muted-foreground">Your Ultimate Multimodal AI Conversationalist</h3>
           </div>
           <HomeChatBotForm userId={user?.id!} />
+          <ModelDropdown className="max-w-[200px]"/>
           {chats.length > 0 && (
               <Card>
                 <CardHeader><h3 className="text-muted-foreground text-sm font-semibold text-center">Previous chats</h3></CardHeader>
