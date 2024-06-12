@@ -96,18 +96,6 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                         const { children, className, node, ...rest } = props
                                         const match = /language-(\w+)/.exec(className || '')
                                         return match ? (
-                                            <div className="relative">
-                                                {/* Copy button */}
-                                                <button
-                                                    className="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
-                                                    onClick={() => {
-                                                        // Handle copy functionality here
-                                                    }}
-                                                >
-                                                    Copy
-                                                </button>
-
-                                                {/* SyntaxHighlighter component */}
                                                 <SyntaxHighlighter
                                                     {...rest}
                                                     PreTag="div"
@@ -122,7 +110,6 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                                                 >
                                                     {String(children).replace(/\n$/, '')}
                                                 </SyntaxHighlighter>
-                                            </div>
                                         ) : (
                                             <code {...rest} className={cn(spaceMono.className, "bg-secondary", className)}>
                                                 {children}
