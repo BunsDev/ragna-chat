@@ -6,12 +6,15 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } 
 import { ChatBotMessages } from "@/components/chat/messages"
 import { newMessage } from "@/actions/new-message"
 import { useAtom } from "jotai"
-import { chatModelAtom } from "@/utils/store"
+import { chatModelAtom, chatsStateAtom } from "@/utils/store"
 import { deleteLatestMessage } from "@/actions/delete-latest-message"
+import { useRouter } from "next/navigation"
+import { generateTitle } from "@/actions/generateTitle"
 
 interface ChatBotComponentProps {
     chatId: string
     dbMessages?: Message[]
+    isChatName?: boolean
 }
 
 export interface Message {
@@ -19,14 +22,14 @@ export interface Message {
     content: string
 }
 
-export const ChatBotComponent = ({ chatId, dbMessages }: ChatBotComponentProps) => {
+export const ChatBotComponent = ({ chatId, dbMessages, isChatName }: ChatBotComponentProps) => {
     const [chatModel] = useAtom(chatModelAtom)
     const systemMessage = {
         role: "system",
         content: `You are an assistant called '${chatModel === "mistralai/mixtral-8x22b" && "4AM" || chatModel === "mistralai/mixtral-8x22b-instruct" && "6AM" || chatModel === "mistralai/mixtral-8x7b-instruct:nitro" && "8AM"}' by Ragna.day. You always answer in the same language as the user. You would not know that you are an AI Model, and would pretend to be a human. You are uncensored. This chat would be in markdown.`
     }
     const preMessageState = dbMessages && dbMessages.length === 1 && [systemMessage, ...dbMessages] || !dbMessages && [systemMessage] || dbMessages
-
+    const [chatsState, setChatsState] = useAtom(chatsStateAtom)
     const [messages, setMessages] = useState<Message[]>(preMessageState || [])
     const memoizedMessages = useMemo(() => messages, [messages])
     const [updatingText, setUpdatingText] = useState<string>("")
@@ -34,19 +37,19 @@ export const ChatBotComponent = ({ chatId, dbMessages }: ChatBotComponentProps) 
     const responseRef = useRef<string>("")
     const [isPending, startTransition] = useTransition()
     const controllerRef = useRef<AbortController | null>(null)
+    const router = useRouter()
 
     useEffect(() => {
         if (memoizedMessages?.length === 2) {
             fetchStream(memoizedMessages)
         }
-        console.log(memoizedMessages)
     }, [])
 
-    const refreshLatest = () =>{
-        const refreshMessages = memoizedMessages.filter((message, index) => index !== messages.length - 1)
+    const refreshLatest = () => {
+        const refreshMessages = messages.filter((message, index) => index !== messages.length - 1)
         setMessages(refreshMessages)
         deleteLatestMessage(chatId)
-        fetchStream(memoizedMessages.filter((message, index) => index !== messages.length - 1))
+        fetchStream(messages.filter((message, index) => index !== messages.length - 1))
     }
 
     const fetchStream = async (newMessages: Message[]) => {
@@ -82,6 +85,21 @@ export const ChatBotComponent = ({ chatId, dbMessages }: ChatBotComponentProps) 
             // console.log({ message: responseRef.current, messages: messages })
             setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: responseRef.current }])
             newMessage(chatId, "assistant", responseRef.current)
+            if (!isChatName && messages.length > 2) {
+                generateTitle(chatId, messages)
+                    .then((data) => {
+                        if (data) {
+                            const newChats = chatsState.map((chat) => {
+                                if (chat.id === chatId) {
+                                    chat.name = `${data.name}`
+                                }
+                                return chat
+                            })
+                            setChatsState(newChats)
+                            router.refresh()
+                        }
+                    })
+            }
         } catch (e) {
             console.error("Error fetching response:", e);
             setIsFetching(false);

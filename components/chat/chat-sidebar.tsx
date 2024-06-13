@@ -8,12 +8,14 @@ import { NewChatButton } from "@/components/chat/new-chat-btn"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChatButton } from "@/components/chat/chat-button"
 import { deleteChat } from "@/actions/delete-chat"
-import { startTransition, useState, useTransition } from "react"
+import { startTransition, useEffect, useState, useTransition } from "react"
 import { useToast } from "../ui/use-toast"
 import { usePathname, useRouter } from "next/navigation"
 import { updateChatName } from "@/actions/update-chat-name"
 import { ModelDropdown } from "@/components/chat/model-dropdown"
 import { Separator } from "../ui/separator"
+import { useAtom } from "jotai"
+import { chatsStateAtom } from "@/utils/store"
 
 
 
@@ -25,9 +27,13 @@ interface ChatSideBarProps {
 export const ChatSideBar = ({ user, chats }: ChatSideBarProps) => {
     const { toast } = useToast()
     const [isPending, setIsPending] = useTransition()
-    const [chatsState, setChatsState] = useState<Chat[]>(chats || [])
+    const [chatsState, setChatsState] = useAtom(chatsStateAtom)
     const pathname = usePathname()
     const router = useRouter()
+
+    useEffect(() => {
+        if(chats) setChatsState(chats)
+    }, [])
     const handleDelete = (chatId: string) => {
         const isCurrentChat = pathname === `/chat/${chatId}`
         if (isCurrentChat) {

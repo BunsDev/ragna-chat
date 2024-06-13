@@ -31,5 +31,5 @@ export const ChatBotSchema = z.object({
 })
 
 export const EditChatNameSchema = z.object({
-    name: z.string().min(2, { message: "Minimum 2 Characters" }).max(30, { message: "Maximum 30 Characters" })
+    name: z.string().min(2, { message: "Minimum 2 Characters" }).max(20, { message: "Maximum 20 Characters" })
 })

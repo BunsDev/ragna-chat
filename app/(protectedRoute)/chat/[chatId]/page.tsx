@@ -14,7 +14,7 @@ const ChatPage = async ({params}: ChatPageProps) => {
     if (!chat || user?.id !== chat.userId) return redirect("/")
     return (
         <div className="md:w-[80%] md:mx-auto">
-            <ChatBotComponent chatId={chatId} dbMessages={dbMessages!} />
+            <ChatBotComponent chatId={chatId} isChatName={!!chat?.name} dbMessages={dbMessages!} />
         </div>
     )
 }

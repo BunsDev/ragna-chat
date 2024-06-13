@@ -2,19 +2,25 @@
 import { deleteChat } from "@/actions/delete-chat"
 import { Chat } from "@prisma/client"
 import { useRouter } from "next/navigation"
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import { ChatButton } from "./chat-button"
 import { updateChatName } from "@/actions/update-chat-name"
+import { useAtom } from "jotai"
+import { chatsStateAtom } from "@/utils/store"
 
 interface HomeChatListProps{
     chats: Chat[]
 }
 const HomeChatList = ({chats}:HomeChatListProps) => {
     const [isPending, startTransition] = useTransition()
-    const [chatsState, setChatsState] = useState<Chat[]>(chats || [])
+    const [chatsState, setChatsState] = useAtom(chatsStateAtom)
     const router = useRouter()
     const { toast } = useToast()
+    
+    useEffect(() => {
+        if(chats) setChatsState(chats)
+    }, [])
     
     const handleDelete = (chatId: string) => {
         startTransition(() => {
