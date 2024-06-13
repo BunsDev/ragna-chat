@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { RefreshCcw } from "lucide-react"
 
 interface ChatBotMessagesProps {
-    chatId:string
     messages?: Message[]
     response?: string
     refreshLatest:()=>void
@@ -17,7 +16,7 @@ const inter = Inter({
     subsets: ["latin"],
 })
 
-export const ChatBotMessages = ({ chatId,messages, response,refreshLatest }: ChatBotMessagesProps) => {
+export const ChatBotMessages = ({ messages, response,refreshLatest }: ChatBotMessagesProps) => {
     const endMessageRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {

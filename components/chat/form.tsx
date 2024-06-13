@@ -9,13 +9,15 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { SendIcon } from "lucide-react"
 import { ClipLoader } from "react-spinners"
+import { StopIcon } from "@radix-ui/react-icons"
 
 interface ChatBoxFormProps {
     onSubmit: (values: z.infer<typeof ChatBotSchema>) => void
     isPending: boolean
+    abortFetch:()=>void
 }
 
-export const ChatBotForm = ({ onSubmit, isPending }: ChatBoxFormProps) => {
+export const ChatBotForm = ({ onSubmit, isPending,abortFetch }: ChatBoxFormProps) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null)
     const form = useForm<z.infer<typeof ChatBotSchema>>({
         resolver: zodResolver(ChatBotSchema),
@@ -69,10 +71,14 @@ export const ChatBotForm = ({ onSubmit, isPending }: ChatBoxFormProps) => {
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                         <Button
                             type="submit"
-                            disabled={isPending}
+                            onClick={()=>{
+                                if(isPending){
+                                    abortFetch()
+                                }
+                            }}
                             variant={"ghost"}
                         >
-                            {!isPending ? <SendIcon size={20} /> : <ClipLoader className="dark:invert" size={20} />}
+                            {!isPending ? <SendIcon size={20} /> : <StopIcon/>}
                         </Button>
                     </div>
                 </div>

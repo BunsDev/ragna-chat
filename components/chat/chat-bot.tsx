@@ -33,6 +33,7 @@ export const ChatBotComponent = ({ chatId, dbMessages }: ChatBotComponentProps) 
     const [isFetching, setIsFetching] = useState<boolean>(false)
     const responseRef = useRef<string>("")
     const [isPending, startTransition] = useTransition()
+    const controllerRef = useRef<AbortController | null>(null)
 
     useEffect(() => {
         if (memoizedMessages?.length === 2) {
@@ -49,11 +50,14 @@ export const ChatBotComponent = ({ chatId, dbMessages }: ChatBotComponentProps) 
     }
 
     const fetchStream = async (newMessages: Message[]) => {
+        controllerRef.current = new AbortController();
+        const signal = controllerRef.current.signal
         responseRef.current = ""
         setIsFetching(true);
         // console.log({newMessages})
         try {
-            const response = await fetch('/api/chat/response', { // Replace '/api/your-endpoint' with your actual endpoint
+            const response = await fetch('/api/chat/response', {
+                signal, // Replace '/api/your-endpoint' with your actual endpoint
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -84,6 +88,16 @@ export const ChatBotComponent = ({ chatId, dbMessages }: ChatBotComponentProps) 
         }
     }
 
+    const abortFetch = () => {
+        if (controllerRef.current) {
+            controllerRef.current.abort();
+            setUpdatingText("")
+            setIsFetching(false)
+            setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: responseRef.current }])
+            newMessage(chatId, "assistant", responseRef.current)
+        }
+    }
+
 
     const onSubmit = (values: z.infer<typeof ChatBotSchema>) => {
         const userMessage: Message = {
@@ -103,7 +117,7 @@ export const ChatBotComponent = ({ chatId, dbMessages }: ChatBotComponentProps) 
                 <ChatBotMessages refreshLatest={refreshLatest} response={updatingText} messages={memoizedMessages} />
             </div>
             <div className="sticky bottom-0 py-4 md:p-4">
-                <ChatBotForm onSubmit={onSubmit} isPending={isFetching} />
+                <ChatBotForm onSubmit={onSubmit} abortFetch={abortFetch} isPending={isFetching} />
             </div>
         </div>
     )
