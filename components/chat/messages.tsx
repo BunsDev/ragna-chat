@@ -47,7 +47,7 @@ export const ChatBotMessages = ({ messages, response,refreshLatest }: ChatBotMes
                         </div>
                     )
                 }
-                if (message.role === "assistant") {
+                if (message.role === "assistant" && message.content) {
                     return (
                         <div key={index} className="w-full">
                             <BotMessage>{message.content}</BotMessage>

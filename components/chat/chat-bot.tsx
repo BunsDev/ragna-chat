@@ -85,7 +85,7 @@ export const ChatBotComponent = ({ chatId, dbMessages, isChatName }: ChatBotComp
             // console.log({ message: responseRef.current, messages: messages })
             setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: responseRef.current }])
             newMessage(chatId, "assistant", responseRef.current)
-            if (!isChatName && messages.length > 2) {
+            if (!isChatName && messages.length > 3) {
                 generateTitle(chatId, messages)
                     .then((data) => {
                         if (data) {
