@@ -1,37 +1,30 @@
 import { Message } from "@/components/chat/chat-bot"
 import { useEffect, useRef } from "react"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { FaRobot } from "react-icons/fa"
-import Markdown from 'react-markdown'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { BotMessage } from '@/components/chat/bot-message'
 import { cn } from "@/lib/utils"
-import { Space_Mono } from "next/font/google"
 import { Inter } from "next/font/google"
-import { HighlightedSyntax } from "./highlighted-syntax"
+import { Button } from "@/components/ui/button"
+import { RefreshCcw } from "lucide-react"
 
 interface ChatBotMessagesProps {
+    chatId:string
     messages?: Message[]
     response?: string
+    refreshLatest:()=>void
 }
-const spaceMono = Space_Mono({
-    subsets: ["latin"],
-    style: ["normal", "italic"],
-    weight: ["400", "700"],
-})
 
 const inter = Inter({
     subsets: ["latin"],
 })
 
-export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) => {
+export const ChatBotMessages = ({ chatId,messages, response,refreshLatest }: ChatBotMessagesProps) => {
     const endMessageRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         if (endMessageRef.current) {
             endMessageRef.current.scrollIntoView({ behavior: 'smooth' })
         }
-    }, [messages, response])
+    }, [messages])
 
     if (messages?.length === 0 || !messages) {
         return (
@@ -58,72 +51,28 @@ export const ChatBotMessages = ({ messages, response }: ChatBotMessagesProps) =>
                 if (message.role === "assistant") {
                     return (
                         <div key={index} className="w-full">
-                            <Card>
-                                <CardHeader><span className="flex gap-2 items-center font-bold text-muted-foreground select-none border-b pb-1">Ragna <FaRobot size={25} /></span></CardHeader>
-                                <CardContent>
-                                    <Markdown
-                                        components={{
-                                            code(props) {
-                                                const { children, className, node, ...rest } = props
-                                                const match = /language-(\w+)/.exec(className || '')
-                                                return match ? (
-                                                    <HighlightedSyntax rest={rest} className={className} match={match}>
-                                                        {String(children).replace(/\n$/, '')}
-                                                    </HighlightedSyntax>
-                                                ) : (
-                                                    <code {...rest} className={cn(spaceMono.className, "bg-secondary", className)}>
-                                                        {children}
-                                                    </code>
-                                                )
-                                            }
-                                        }}>
-                                        {message.content}
-                                    </Markdown>
-                                </CardContent>
-                            </Card>
+                            <BotMessage>{message.content}</BotMessage>
                         </div>
                     )
                 }
             })}
             {response && (
                 <div className="w-full">
-                    <Card>
-                        <CardHeader><span className="flex gap-2 items-center font-bold text-muted-foreground select-none border-b pb-1">Ragna<FaRobot size={25} /></span></CardHeader>
-                        <CardContent>
-                            <Markdown
-                                components={{
-                                    code(props) {
-                                        const { children, className, node, ...rest } = props
-                                        const match = /language-(\w+)/.exec(className || '')
-                                        return match ? (
-                                                <SyntaxHighlighter
-                                                    {...rest}
-                                                    PreTag="div"
-                                                    language={match[1]}
-                                                    className={cn(spaceMono.className, "text-[12px] md:text-base", className)}
-                                                    style={oneDark}
-                                                    ref={node => {
-                                                        if (node) {
-                                                            // Do something with the ref if needed
-                                                        }
-                                                    }}
-                                                >
-                                                    {String(children).replace(/\n$/, '')}
-                                                </SyntaxHighlighter>
-                                        ) : (
-                                            <code {...rest} className={cn(spaceMono.className, "bg-secondary", className)}>
-                                                {children}
-                                            </code>
-                                        )
-                                    }
-                                }}
-                            >{response}
-                            </Markdown>
-                        </CardContent>
-                    </Card>
+                    <div className="w-full">
+                        <BotMessage live>{response}</BotMessage>
+                    </div>
                 </div>
             )}
-            <div ref={endMessageRef}></div>
+            {messages[messages.length - 1].role === "assistant" && (
+                <div className="ml-auto">
+                    <Button onClick={()=>refreshLatest()} variant={"ghost"}>
+                        <RefreshCcw size={20} />
+                    </Button>
+                </div>
+            )}
+            <div ref={endMessageRef}>
+                {/* Empty div to scroll to */}
+            </div>
         </div>
     )
 }

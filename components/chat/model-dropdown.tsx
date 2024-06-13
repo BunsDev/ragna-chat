@@ -9,17 +9,14 @@ export const ModelDropdown = ({className=""}:{className?:string}) => {
         setModel((prev)=>(model))
     }
     const models = [{
-        value:"meta-llama/llama-3-8b-instruct:free",
-        label:"Meta llama"
+        value:"mistralai/mixtral-8x22b",
+        label:"4AM"
     },{
-        value:"microsoft/phi-3-mini-128k-instruct:free",
-        label:"Microsoft Phi"
+        value:"mistralai/mixtral-8x22b-instruct",
+        label:"6AM"
     },{
-        value:"google/gemini-flash-1.5",
-        label:"Google Gemini"
-    },{
-        value:"openai/gpt-3.5-turbo",
-        label:"OpenAI GPT-3.5"
+        value:"mistralai/mixtral-8x7b-instruct:nitro",
+        label:"8AM"
     }]
   return (
     <Select onValueChange={handleChange} value={model}>

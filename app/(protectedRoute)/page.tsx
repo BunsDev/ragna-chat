@@ -14,7 +14,7 @@ const HomePage = async () => {
     <section className="gridbg flex justify-center">
       <div className="md:w-[80%] h-full">
         <div className="flex flex-col gap-10 justify-center h-[calc(100vh-5rem)] items-center">
-          <div className="flex flex-col justify-center text-center">
+          <div className="flex flex-col justify-center text-center select-none">
             <h1 className="font-extrabold tracking-tighter text-3xl md:text-5xl">Universal Chat Assistant</h1>
             <h3 className="fond-bold text-lg text-muted-foreground">Your Ultimate Multimodal AI Conversationalist</h3>
           </div>
