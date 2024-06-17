@@ -140,6 +140,7 @@ export const ChatBotComponent = ({ chatId, dbMessages, isChatName }: ChatBotComp
                                 content: values.prompt
                             }
                             setMessages((prevMessages) => [...prevMessages, systemMessage, uploadMessage, userMessage])
+                            newMessage(chatId,systemMessage.role,systemMessage.content)
                             newMessage(chatId, uploadMessage.role, uploadMessage.content)
                             newMessage(chatId, userMessage.role, userMessage.content)
                             fetchStream([...messages, systemMessage, uploadMessage, userMessage])
@@ -168,6 +169,7 @@ export const ChatBotComponent = ({ chatId, dbMessages, isChatName }: ChatBotComp
                                 content: values.prompt
                             }
                             setMessages((prevMessages) => [...prevMessages, systemMessage, uploadMessage, userMessage])
+                            newMessage(chatId,systemMessage.role,systemMessage.content)
                             newMessage(chatId, uploadMessage.role, uploadMessage.content)
                             newMessage(chatId, userMessage.role, userMessage.content)
                             fetchStream([...messages, systemMessage, uploadMessage, userMessage])

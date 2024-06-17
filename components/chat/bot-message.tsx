@@ -43,6 +43,7 @@ export const BotMessage = ({ children, live = false, }: BotMessageProps) => {
             </CardHeader>
             <CardContent>
                 <MarkdownRMD
+                className={"text-wrap"}
                     components={{
                         code(props) {
                             const { children, className, node, ...rest } = props
