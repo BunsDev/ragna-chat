@@ -21,7 +21,15 @@ export const SettingsDeleteSchema = z.object({
     code: z.string({ message: "Code is required" })
 })
 
+const validateFileSize = (file: File) => {
+    const maxSize = 5 * 1024 * 1024;// 5MB in bytes
+    return file.size <= maxSize
+}
+
 export const ChatBotSchema = z.object({
+    file: z.optional(z.array(z.instanceof(File).refine((file:File) => {
+        return validateFileSize(file) && (file.type.startsWith("text/") || file.type === "application/pdf")
+    }))),
     prompt: z.string()
         .min(1, { message: "Prompt must be at least 1 character long." })
         .max(3600, { message: "Prompt cannot exceed 3600 characters." })

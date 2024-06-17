@@ -4,9 +4,9 @@ import { openRouter } from "@/lib/openrouter";
 
 export const generateTitle = async (chatId: string, _messages: any) => {
   try {
-    const promptMessages = [..._messages,{ role: "system", content: "Generate a name for this chat context (20 character limit)" }]
+    const promptMessages = [..._messages,{ role: "system", content: "Generate a concise and catchy title for this chat (20 characters max)." }]
     const completion = await openRouter.chat.completions.create({
-      model: "mistralai/mixtral-8x22b-instruct",
+      model: "openai/gpt-3.5-turbo",
       messages: promptMessages,
     })
 

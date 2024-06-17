@@ -2,7 +2,7 @@
 import { ChatBotSchema } from "@/schemas"
 import { ChatBotForm } from "./form"
 import * as z from "zod"
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react"
+import { use, useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { ChatBotMessages } from "@/components/chat/messages"
 import { newMessage } from "@/actions/new-message"
 import { useAtom } from "jotai"
@@ -10,6 +10,8 @@ import { chatModelAtom, chatsStateAtom } from "@/utils/store"
 import { deleteLatestMessage } from "@/actions/delete-latest-message"
 import { useRouter } from "next/navigation"
 import { generateTitle } from "@/actions/generateTitle"
+import extractTextFromPDF from "pdf-parser-client-side"
+import { useToast } from "../ui/use-toast"
 
 interface ChatBotComponentProps {
     chatId: string
@@ -38,6 +40,7 @@ export const ChatBotComponent = ({ chatId, dbMessages, isChatName }: ChatBotComp
     const [isPending, startTransition] = useTransition()
     const controllerRef = useRef<AbortController | null>(null)
     const router = useRouter()
+    const {toast} = useToast()
 
     useEffect(() => {
         if (memoizedMessages?.length === 2) {
@@ -116,17 +119,74 @@ export const ChatBotComponent = ({ chatId, dbMessages, isChatName }: ChatBotComp
         }
     }
 
-
     const onSubmit = (values: z.infer<typeof ChatBotSchema>) => {
-        const userMessage: Message = {
-            role: "user",
-            content: values.prompt,
+        if (values.file) {
+            const file = values?.file[0]
+            if (file.type === "application/pdf") {
+                startTransition(() => {
+                    extractTextFromPDF(file, "alphanumericwithspaceandpunctuationandnewline")
+                        .then((data) => {
+                            console.log(data)
+                            const systemMessage = {
+                                role: "system",
+                                content: `User uploaded a file ${file.name} with content: ${data}`
+                            }
+                            const uploadMessage = {
+                                role: "user",
+                                content: `${file.name}`
+                            }
+                            const userMessage = {
+                                role: "user",
+                                content: values.prompt
+                            }
+                            setMessages((prevMessages) => [...prevMessages, systemMessage, uploadMessage, userMessage])
+                            newMessage(chatId, uploadMessage.role, uploadMessage.content)
+                            newMessage(chatId, userMessage.role, userMessage.content)
+                            fetchStream([...messages, systemMessage, uploadMessage, userMessage])
+                        }).catch((error)=>{
+                            toast({
+                                title: "Error",
+                                description: "An error occurred while processing the PDF file. Please try again.",
+                            })
+                        })
+                })
+            }
+            if (file.type.startsWith("text/")) {
+                startTransition(() => {
+                    file.text()
+                        .then((data) => {
+                            const systemMessage = {
+                                role: "system",
+                                content: `User uploaded a file ${file.name} with content: ${data}`
+                            }
+                            const uploadMessage = {
+                                role: "user",
+                                content: `${file.name}`
+                            }
+                            const userMessage = {
+                                role: "user",
+                                content: values.prompt
+                            }
+                            setMessages((prevMessages) => [...prevMessages, systemMessage, uploadMessage, userMessage])
+                            newMessage(chatId, uploadMessage.role, uploadMessage.content)
+                            newMessage(chatId, userMessage.role, userMessage.content)
+                            fetchStream([...messages, systemMessage, uploadMessage, userMessage])
+                        })
+                })
+            }
         }
-        setMessages((prevMessages) => [...prevMessages, userMessage])
-        newMessage(chatId, "user", values.prompt)
-        startTransition(() => {
-            fetchStream([...messages, { role: "user", content: values.prompt }])
-        })
+        else {
+            startTransition(() => {
+                const userMessage: Message = {
+                    role: "user",
+                    content: values.prompt,
+                }
+                setMessages((prevMessages) => [...prevMessages, userMessage])
+                newMessage(chatId, "user", values.prompt)
+
+                fetchStream([...messages, { role: "user", content: values.prompt }])
+            })
+        }
     }
 
     return (
@@ -135,7 +195,7 @@ export const ChatBotComponent = ({ chatId, dbMessages, isChatName }: ChatBotComp
                 <ChatBotMessages refreshLatest={refreshLatest} response={updatingText} messages={memoizedMessages} />
             </div>
             <div className="sticky bottom-0 py-4 md:p-4">
-                <ChatBotForm onSubmit={onSubmit} abortFetch={abortFetch} isPending={isFetching} />
+                <ChatBotForm onSubmit={onSubmit} abortFetch={abortFetch} isPending={isPending} isFetching={isFetching} />
             </div>
         </div>
     )
