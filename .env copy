@@ -1,0 +1,9 @@
+AUTH_SECRET=N99uhRuqM+CfXRzA7DNUlONRTrANysGPSPlCM50gJRg=
+
+PG_DB_URL= #use postgresql url
+BASE_URL=http://localhost:3000 #change it to your domain name
+
+NODEMAILER_EMAIL= #use your email
+NODEMAILER_PASSWORD= #use your email password
+
+OPENROUTER_API_KEY=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

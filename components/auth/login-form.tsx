@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import { login } from "@/actions/login"
 import { BarLoader } from "react-spinners"
+import { CardFooter } from "../ui/card"
+import Link from "next/link"
 
 export const LoginForm = () => {
     const { toast } = useToast()
@@ -44,7 +46,7 @@ export const LoginForm = () => {
         })
     }
     return (
-        <CardWrapper>
+        <CardWrapper showTnC>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-2">
                     <FormField

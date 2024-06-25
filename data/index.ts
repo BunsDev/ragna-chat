@@ -56,3 +56,25 @@ export const getMessagesByChatId = async (chatId: string) => {
         return null
     }
 }
+
+export const getTrialChatById = async (id: string) => {
+    try {
+        return await db.trialChat.findFirst({ where: { id } })
+    } catch {
+        return null
+    }
+}
+
+export const getTrialMessagesByChatId = async (chatId: string) => {
+    try {
+        return await db.trialMessage.findMany({
+            where: { chatId },
+            select: {
+                role: true,
+                content: true
+            }
+        })
+    } catch {
+        return null
+    }
+}

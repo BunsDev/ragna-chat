@@ -10,3 +10,7 @@ export const publicRoutes:string[] = [
 ]
 
 export const DEFAULT_LOGIN_REDIRECT = "/"
+
+export const trialModePrefix = "/try"
+
+export const publicPubicPrefix = "/public"

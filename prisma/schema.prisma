@@ -88,3 +88,22 @@ model Message {
   updatedAt DateTime @updatedAt
   chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
 }
+
+
+model TrialChat {
+  id        String    @id @default(cuid())
+  name      String?
+  messages  TrialMessage[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model TrialMessage {
+  id        String   @id @default(cuid())
+  chatId    String
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  chat      TrialChat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+}

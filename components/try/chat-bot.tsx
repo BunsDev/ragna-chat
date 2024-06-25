@@ -1,19 +1,19 @@
 "use client"
 import { ChatBotSchema } from "@/schemas"
-import { ChatBotForm } from "./form"
+import { ChatBotForm } from "@/components/chat/form"
 import * as z from "zod"
-import { use, useEffect, useMemo, useRef, useState, useTransition } from "react"
+import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { ChatBotMessages } from "@/components/chat/messages"
-import { newMessage } from "@/actions/new-message"
+import { newTrialMessage } from "@/actions/try/new-message"
 import { useAtom } from "jotai"
 import { chatModelAtom, chatsStateAtom } from "@/utils/store"
-import { deleteLatestMessage } from "@/actions/delete-latest-message"
 import { useRouter } from "next/navigation"
 import { generateTitle } from "@/actions/generateTitle"
 import extractTextFromPDF from "pdf-parser-client-side"
 import { useToast } from "@/components/ui/use-toast"
+import { deleteLatestTrialMessage } from "@/actions/try/delete-latest-message"
 
-interface ChatBotComponentProps {
+interface TrialChatBotComponentProps {
     chatId: string
     dbMessages?: Message[]
     isChatName?: boolean
@@ -24,7 +24,7 @@ export interface Message {
     content: string
 }
 
-export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotComponentProps) => {
+export const TrialChatBotComponent = ({ chatId, dbMessages, isChatName }: TrialChatBotComponentProps) => {
     const [chatModel] = useAtom(chatModelAtom)
     const systemMessage = {
         role: "system",
@@ -43,19 +43,16 @@ export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotC
     const {toast} = useToast()
 
     useEffect(() => {
+            // console.log("No dbMessages",)
             toast({
                 title:"This chat will be temporary and will not be saved.",
-                description:"Please note that this chat will not be saved and will be deleted after you leave the page.",
             })
-        if (memoizedMessages?.length === 2) {
-            fetchStream(memoizedMessages)
-        }
     }, [])
 
     const refreshLatest = () => {
         const refreshMessages = messages.filter((message, index) => index !== messages.length - 1)
         setMessages(refreshMessages)
-        deleteLatestMessage(chatId)
+        deleteLatestTrialMessage(chatId)
         fetchStream(messages.filter((message, index) => index !== messages.length - 1))
     }
 
@@ -91,7 +88,7 @@ export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotC
             setUpdatingText("")
             // console.log({ message: responseRef.current, messages: messages })
             setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: responseRef.current }])
-            newMessage(chatId, "assistant", responseRef.current)
+            newTrialMessage(chatId, "assistant", responseRef.current)
             if (!isChatName && messages.length > 3) {
                 generateTitle(chatId, messages)
                     .then((data) => {
@@ -119,7 +116,7 @@ export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotC
             setUpdatingText("")
             setIsFetching(false)
             setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: responseRef.current }])
-            newMessage(chatId, "assistant", responseRef.current)
+            newTrialMessage(chatId, "assistant", responseRef.current)
         }
     }
 
@@ -144,9 +141,9 @@ export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotC
                                 content: values.prompt
                             }
                             setMessages((prevMessages) => [...prevMessages, systemMessage, uploadMessage, userMessage])
-                            newMessage(chatId,systemMessage.role,systemMessage.content)
-                            newMessage(chatId, uploadMessage.role, uploadMessage.content)
-                            newMessage(chatId, userMessage.role, userMessage.content)
+                            newTrialMessage(chatId,systemMessage.role,systemMessage.content)
+                            newTrialMessage(chatId, uploadMessage.role, uploadMessage.content)
+                            newTrialMessage(chatId, userMessage.role, userMessage.content)
                             fetchStream([...messages, systemMessage, uploadMessage, userMessage])
                         }).catch((error)=>{
                             toast({
@@ -173,9 +170,9 @@ export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotC
                                 content: values.prompt
                             }
                             setMessages((prevMessages) => [...prevMessages, systemMessage, uploadMessage, userMessage])
-                            newMessage(chatId,systemMessage.role,systemMessage.content)
-                            newMessage(chatId, uploadMessage.role, uploadMessage.content)
-                            newMessage(chatId, userMessage.role, userMessage.content)
+                            newTrialMessage(chatId,systemMessage.role,systemMessage.content)
+                            newTrialMessage(chatId, uploadMessage.role, uploadMessage.content)
+                            newTrialMessage(chatId, userMessage.role, userMessage.content)
                             fetchStream([...messages, systemMessage, uploadMessage, userMessage])
                         })
                 })
@@ -188,7 +185,7 @@ export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotC
                     content: values.prompt,
                 }
                 setMessages((prevMessages) => [...prevMessages, userMessage])
-                newMessage(chatId, "user", values.prompt)
+                newTrialMessage(chatId, "user", values.prompt)
 
                 fetchStream([...messages, { role: "user", content: values.prompt }])
             })
