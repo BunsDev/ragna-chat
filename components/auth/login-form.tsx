@@ -46,7 +46,7 @@ export const LoginForm = () => {
         })
     }
     return (
-        <CardWrapper showTnC>
+        <CardWrapper showTnC showOAuth>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-2">
                     <FormField

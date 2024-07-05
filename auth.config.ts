@@ -1,11 +1,23 @@
 import type { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
+import Google from "next-auth/providers/google"
+import Apple from "next-auth/providers/apple"
 import { LoginSchema } from "@/schemas"
 import { findUserByEmail, getLoginCodeByEmail } from "@/data"
 import { db } from "@/lib/db"
 
 export default {
     providers: [
+        Google({
+            clientId: process.env.AUTH_GOOGLE_ID,
+            clientSecret: process.env.AUTH_GOOGLE_SECRET,
+            allowDangerousEmailAccountLinking: true
+        }),
+        Apple({
+            clientId: process.env.AUTH_APPLE_ID,
+            clientSecret: process.env.AUTH_APPLE_SECRET as string,
+            allowDangerousEmailAccountLinking: true
+        }),
         Credentials({
             async authorize(credentials) {
                 const validatedFields = LoginSchema.safeParse(credentials)
