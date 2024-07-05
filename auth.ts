@@ -20,10 +20,13 @@ export const {
                 where: { id: user.id },
                 data: { emailVerified: new Date() }
             })
-        }
+        },
     },
+    debug:true,
     callbacks: {
         async signIn({ user, account }) {
+            if(account?.type !== "credentials") return true
+
             const exisitingUser = await findUserById(user.id!)
 
             if (!exisitingUser?.emailVerified) return false
