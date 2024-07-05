@@ -48,6 +48,7 @@ export const getMessagesByChatId = async (chatId: string) => {
         return await db.message.findMany({
             where: { chatId },
             select: {
+                id:true,
                 role: true,
                 content: true
             }
@@ -70,6 +71,7 @@ export const getTrialMessagesByChatId = async (chatId: string) => {
         return await db.trialMessage.findMany({
             where: { chatId },
             select: {
+                id:true,
                 role: true,
                 content: true
             }

@@ -11,12 +11,12 @@ const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
     return (
         <div className="min-h-screen">
             <div className="sticky top-0 z-[2] bg-background">
-                <div className="py-3 px-5">
-                    <ProtectedNavbar user={user} chats={chats}/>
+                <div className="py-3 px-8">
+                    <ProtectedNavbar user={user} chats={chats} />
                 </div>
             </div>
             <div className="mx-5">
-            {children}
+                {children}
             </div>
         </div>
     )

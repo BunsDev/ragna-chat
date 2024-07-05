@@ -18,7 +18,7 @@ export const ChatButton = ({ chat, handleDelete,handleNameChange, isPending }: C
     const isCurrentChat = pathname === `/chat/${chat.id}`
     return (
         <div className="grid grid-cols-8">
-            <Button className="col-span-6" variant={`${isCurrentChat ? "default" : "link"}`} asChild>
+            <Button className="col-span-6 text-black dark:text-white" variant={`${isCurrentChat ? "default" : "link"}`} asChild>
                 <Link href={`/chat/${chat.id}`}>
                     {chat.name || `untitled ${new Date(chat.updatedAt).toDateString()}`}
                 </Link>

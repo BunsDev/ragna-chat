@@ -4,7 +4,6 @@ import { SettingsDeleteSchema } from "@/schemas"
 import { db } from "@/lib/db"
 import { sendDeleteCodeEmail, sendDeleteSuccessEmail } from "@/lib/mail"
 import { generateDeleteCode } from "@/lib/delete-code"
-import { signOut } from "@/auth"
 import { getDeleteCodeByEmail } from "@/data"
 
 export const deleteCodeAction = async (email:string) =>{

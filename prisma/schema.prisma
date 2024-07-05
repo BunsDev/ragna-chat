@@ -79,6 +79,11 @@ model Chat {
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum MessageFeedback {
+  GOOD
+  BAD
+}
+
 model Message {
   id        String   @id @default(cuid())
   chatId    String
@@ -86,6 +91,7 @@ model Message {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  feedback MessageFeedback?
   chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
 }
 
@@ -105,5 +111,6 @@ model TrialMessage {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  feedback MessageFeedback?
   chat      TrialChat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
 }

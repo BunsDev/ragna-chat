@@ -1,6 +1,13 @@
 import { CardWrapper } from "@/components/auth/card-wrapper"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { Metadata } from "next"
+import { siteConfig } from "@/config"
+
+export const metadata: Metadata = {
+  title: `Auth Error | ${siteConfig.name}`,
+  description: "Auth Error Page",
+}
 
 const AuthErrorPage = () => {
   return (

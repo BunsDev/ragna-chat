@@ -7,7 +7,7 @@ export const TryNavbar = () => {
     <header>
         <div className="flex">
             <div className="mx-auto">
-            <Logo/>
+            <Link className="cursor-pointer" href={"/"}><Logo/></Link>
             </div>
             <Button asChild><Link href={"/auth/login"}>Login</Link></Button>
         </div>

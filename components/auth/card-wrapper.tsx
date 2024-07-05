@@ -20,7 +20,7 @@ export const CardWrapper = ({ children, headerLabel = `Start using ${siteConfig.
                 <h3 className="text-muted-foreground text-sm font-semibold self-start">
                     Accept terms and conditions
                 </h3>
-                <p className="text-sm">By continuing you agree to {siteConfig.name}'s <a className="underline" href="/">Consumer Terms</a> and <a className="underline" href="/">Usage policy</a>, and acknowledge their <a className="underline" href="/">Privacy Policy</a>.</p>
+                <p className="text-sm">{`By continuing you agree to ${siteConfig.name}'s `}<a className="underline" href="/">Consumer Terms</a> and <a className="underline" href="/">Usage policy</a>, and acknowledge their <a className="underline" href="/">Privacy Policy</a>.</p>
             </CardFooter>)}
         </Card>
     )

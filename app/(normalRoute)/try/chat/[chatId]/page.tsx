@@ -1,6 +1,13 @@
 import { TrialChatBotComponent } from "@/components/try/chat-bot"
+import { siteConfig } from "@/config"
 import { getTrialChatById, getTrialMessagesByChatId } from "@/data"
+import { Metadata } from "next"
 import { redirect } from "next/navigation"
+
+export const metadata: Metadata = {
+  title: `Trial Chat | ${siteConfig.name}`,
+  description: "Trial Chat Page",
+}
 
 interface TrialChatBotPageProps {
   params: { chatId: string }

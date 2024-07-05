@@ -27,7 +27,7 @@ export default auth ((req) => {
     // if (isBlogRoute) return null
     if(isTrialRoute){
         if(isLoggedIn){
-            return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT))
+            return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT,nextUrl))
         }
         return
     }

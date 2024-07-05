@@ -2,9 +2,15 @@ import { SettingsAccount } from "@/components/protected/settings/account"
 import SettingsDelete from "@/components/protected/settings/delete"
 import { SettingsName } from "@/components/protected/settings/name"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { siteConfig } from "@/config"
 import { currentUser } from "@/lib/auth"
-import { Pencil2Icon } from "@radix-ui/react-icons"
 import { PencilIcon, TriangleAlertIcon, User2 } from "lucide-react"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title: `Settings | ${siteConfig.name}`,
+    description: "Settings Page",
+  }
 
 const SettingsPage = async () => {
     const user = await currentUser()

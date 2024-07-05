@@ -2,7 +2,7 @@
 import { ChatBotSchema } from "@/schemas"
 import { ChatBotForm } from "./form"
 import * as z from "zod"
-import { use, useEffect, useMemo, useRef, useState, useTransition } from "react"
+import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { ChatBotMessages } from "@/components/chat/messages"
 import { newMessage } from "@/actions/new-message"
 import { useAtom } from "jotai"
@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation"
 import { generateTitle } from "@/actions/generateTitle"
 import extractTextFromPDF from "pdf-parser-client-side"
 import { useToast } from "@/components/ui/use-toast"
+import { newLatestFeedback } from "@/actions/new-message-feedback"
 
 interface ChatBotComponentProps {
     chatId: string
@@ -20,11 +21,12 @@ interface ChatBotComponentProps {
 }
 
 export interface Message {
+    id?:string
     role: "user" | "assistant" | "system" | string
     content: string
 }
 
-export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotComponentProps) => {
+export const ChatBotComponent = ({ chatId, dbMessages, isChatName }: ChatBotComponentProps) => {
     const [chatModel] = useAtom(chatModelAtom)
     const systemMessage = {
         role: "system",
@@ -43,10 +45,7 @@ export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotC
     const {toast} = useToast()
 
     useEffect(() => {
-            toast({
-                title:"This chat will be temporary and will not be saved.",
-                description:"Please note that this chat will not be saved and will be deleted after you leave the page.",
-            })
+        console.log(dbMessages)
         if (memoizedMessages?.length === 2) {
             fetchStream(memoizedMessages)
         }
@@ -59,6 +58,24 @@ export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotC
         fetchStream(messages.filter((message, index) => index !== messages.length - 1))
     }
 
+    const feedbackLatest = (feedback:"GOOD"|"BAD") => {
+            newLatestFeedback(feedback)
+            .then((data)=>{
+                if(data.success){
+                    toast({
+                        title: "Feedback submitted",
+                        description: "Thank you for your feedback!",
+                    })
+                }
+                else{
+                    toast({
+                        title: "Error",
+                        description: "An error occurred while submitting your feedback. Please try again.",
+                    })
+                }
+            })
+    }
+
     const fetchStream = async (newMessages: Message[]) => {
         controllerRef.current = new AbortController();
         const signal = controllerRef.current.signal
@@ -67,12 +84,12 @@ export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotC
         // console.log({newMessages})
         try {
             const response = await fetch('/api/chat/response', {
-                signal, // Replace '/api/your-endpoint' with your actual endpoint
+                signal,
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ newMessages, chatModel }) // Replace with your actual prompt
+                body: JSON.stringify({ newMessages, chatModel })
             })
             const reader = response.body!.getReader()
             const decoder = new TextDecoder('utf-8')
@@ -198,9 +215,9 @@ export const ChatBotComponent = ({ chatId, dbMessages=[], isChatName }: ChatBotC
     return (
         <div className="relative flex flex-col">
             <div className="flex-1 overflow-y-auto py-4 md:p-4">
-                <ChatBotMessages refreshLatest={refreshLatest} response={updatingText} messages={memoizedMessages} />
+                <ChatBotMessages refreshLatest={refreshLatest} feedbackLatest={feedbackLatest} response={updatingText} messages={memoizedMessages} />
             </div>
-            <div className="sticky bottom-0 py-4 md:p-4">
+            <div className="sticky bottom-0 md:bottom-[25px] py-4 md:p-4">
                 <ChatBotForm onSubmit={onSubmit} abortFetch={abortFetch} isPending={isPending} isFetching={isFetching} />
             </div>
         </div>

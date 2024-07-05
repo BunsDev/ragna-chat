@@ -12,6 +12,7 @@ import { generateTitle } from "@/actions/generateTitle"
 import extractTextFromPDF from "pdf-parser-client-side"
 import { useToast } from "@/components/ui/use-toast"
 import { deleteLatestTrialMessage } from "@/actions/try/delete-latest-message"
+import { newLatestTrialFeedback } from "@/actions/try/new-message-feedback"
 
 interface TrialChatBotComponentProps {
     chatId: string
@@ -40,14 +41,32 @@ export const TrialChatBotComponent = ({ chatId, dbMessages, isChatName }: TrialC
     const [isPending, startTransition] = useTransition()
     const controllerRef = useRef<AbortController | null>(null)
     const router = useRouter()
-    const {toast} = useToast()
+    const { toast } = useToast()
 
     useEffect(() => {
-            // console.log("No dbMessages",)
-            toast({
-                title:"This chat will be temporary and will not be saved.",
-            })
+        toast({
+            title: "This chat will be temporary and will not be saved.",
+        })
     }, [])
+
+
+    const feedbackLatest = (feedback: "GOOD" | "BAD") => {
+        newLatestTrialFeedback(feedback)
+            .then((data) => {
+                if (data.success) {
+                    toast({
+                        title: "Feedback submitted",
+                        description: "Thank you for your feedback!",
+                    })
+                }
+                else {
+                    toast({
+                        title: "Error",
+                        description: "An error occurred while submitting your feedback. Please try again.",
+                    })
+                }
+            })
+    }
 
     const refreshLatest = () => {
         const refreshMessages = messages.filter((message, index) => index !== messages.length - 1)
@@ -141,11 +160,11 @@ export const TrialChatBotComponent = ({ chatId, dbMessages, isChatName }: TrialC
                                 content: values.prompt
                             }
                             setMessages((prevMessages) => [...prevMessages, systemMessage, uploadMessage, userMessage])
-                            newTrialMessage(chatId,systemMessage.role,systemMessage.content)
+                            newTrialMessage(chatId, systemMessage.role, systemMessage.content)
                             newTrialMessage(chatId, uploadMessage.role, uploadMessage.content)
                             newTrialMessage(chatId, userMessage.role, userMessage.content)
                             fetchStream([...messages, systemMessage, uploadMessage, userMessage])
-                        }).catch((error)=>{
+                        }).catch((error) => {
                             toast({
                                 title: "Error",
                                 description: "An error occurred while processing the PDF file. Please try again.",
@@ -170,7 +189,7 @@ export const TrialChatBotComponent = ({ chatId, dbMessages, isChatName }: TrialC
                                 content: values.prompt
                             }
                             setMessages((prevMessages) => [...prevMessages, systemMessage, uploadMessage, userMessage])
-                            newTrialMessage(chatId,systemMessage.role,systemMessage.content)
+                            newTrialMessage(chatId, systemMessage.role, systemMessage.content)
                             newTrialMessage(chatId, uploadMessage.role, uploadMessage.content)
                             newTrialMessage(chatId, userMessage.role, userMessage.content)
                             fetchStream([...messages, systemMessage, uploadMessage, userMessage])
@@ -195,9 +214,9 @@ export const TrialChatBotComponent = ({ chatId, dbMessages, isChatName }: TrialC
     return (
         <div className="relative flex flex-col">
             <div className="flex-1 overflow-y-auto py-4 md:p-4">
-                <ChatBotMessages refreshLatest={refreshLatest} response={updatingText} messages={memoizedMessages} />
+                <ChatBotMessages refreshLatest={refreshLatest} feedbackLatest={feedbackLatest} response={updatingText} messages={memoizedMessages} />
             </div>
-            <div className="sticky bottom-0 py-4 md:p-4">
+            <div className="sticky bottom-0 md:bottom-[25px] py-4 md:p-4">
                 <ChatBotForm onSubmit={onSubmit} abortFetch={abortFetch} isPending={isPending} isFetching={isFetching} />
             </div>
         </div>

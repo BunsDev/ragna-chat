@@ -4,19 +4,20 @@ import { BotMessage } from '@/components/chat/bot-message'
 import { cn } from "@/lib/utils"
 import { Inter } from "next/font/google"
 import { Button } from "@/components/ui/button"
-import { RefreshCcw } from "lucide-react"
+import { RefreshCcw, ThumbsDown, ThumbsUp } from "lucide-react"
 
 interface ChatBotMessagesProps {
     messages?: Message[]
     response?: string
     refreshLatest:()=>void
+    feedbackLatest: (feedback: "GOOD" | "BAD") => void
 }
 
 const inter = Inter({
     subsets: ["latin"],
 })
 
-export const ChatBotMessages = ({ messages, response,refreshLatest }: ChatBotMessagesProps) => {
+export const ChatBotMessages = ({ messages, response,refreshLatest,feedbackLatest }: ChatBotMessagesProps) => {
     const endMessageRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -63,7 +64,15 @@ export const ChatBotMessages = ({ messages, response,refreshLatest }: ChatBotMes
                 </div>
             )}
             {messages[messages.length - 1].role === "assistant" && (
-                <div className="ml-auto">
+                <div className="flex mt-5 p-5 items-center justify-between">
+                    <div className="flex gap-5">
+                        <Button size={"sm"} variant={"ghost"} onClick={()=>feedbackLatest("GOOD")}>
+                        <ThumbsUp size={20}/>
+                        </Button>
+                        <Button size={"sm"} variant={"ghost"} onClick={()=>feedbackLatest("BAD")}>
+                        <ThumbsDown size={20}/>
+                        </Button>
+                    </div>
                     <Button onClick={()=>refreshLatest()} variant={"ghost"}>
                         <RefreshCcw size={20} />
                     </Button>

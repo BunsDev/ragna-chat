@@ -13,6 +13,7 @@ export const POST = async (req:Request) => {
 
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
+  try{
 
   const stream = await openRouter.chat.completions.create({
     model: chatModel,
@@ -41,4 +42,8 @@ export const POST = async (req:Request) => {
       "Connection": "keep-alive",
     },
   });
+}catch(e){
+  console.log(e)
+  return new Response("Something went wrong", { status: 500 });
+}
 };

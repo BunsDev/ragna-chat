@@ -17,6 +17,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { siteConfig } from "@/config"
 
 interface ChatBoxFormProps {
     onSubmit: (values: z.infer<typeof ChatBotSchema>) => void
@@ -56,6 +57,7 @@ export const ChatBotForm = ({ onSubmit, isPending, abortFetch,isFetching }: Chat
         }
     }
     return (
+        <>
         <Form {...form}>
             <form onSubmit={(form.handleSubmit(onSubmitHandler))} className="pt-1 w-full">
             {files[0] && (
@@ -148,5 +150,7 @@ export const ChatBotForm = ({ onSubmit, isPending, abortFetch,isFetching }: Chat
                 </div>
             </form>
         </Form>
+        {/* <div><p className="text-muted-foreground text-sm text-center pt-2">{siteConfig.name} can make mistakes. Check important info.</p></div> */}
+        </>
     )
 }
