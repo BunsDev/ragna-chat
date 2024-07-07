@@ -3,6 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import { findAccountByUserId, findUserById } from "@/data"
 import authConfig from "@/auth.config"
 import { db } from "@/lib/db"
+import { sendVerificationSuccessEmail } from "./lib/mail"
 
 export const {
     handlers: { GET, POST },
@@ -20,10 +21,13 @@ export const {
                 where: { id: user.id },
                 data: { emailVerified: new Date() }
             })
+            sendVerificationSuccessEmail(user?.email!)
         }
     },
     callbacks: {
         async signIn({ user, account }) {
+            if(account?.type !== "credentials") return true
+
             const exisitingUser = await findUserById(user.id!)
 
             if (!exisitingUser?.emailVerified) return false
