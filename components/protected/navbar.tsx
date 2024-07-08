@@ -5,10 +5,10 @@ import { UserButton } from "@/components/protected/user-button"
 import { usePathname } from "next/navigation"
 import { ChatSideBar } from "@/components/chat/chat-sidebar"
 import { Chat } from "@prisma/client"
-import { ExtendedUser } from "@/next-auth"
+import { User } from "next-auth"
 
 interface ProtectedNavbarProps {
-  user?: ExtendedUser
+  user?: User
   chats?: Chat[]
 }
 export const ProtectedNavbar = ({ user,chats }: ProtectedNavbarProps) => {
