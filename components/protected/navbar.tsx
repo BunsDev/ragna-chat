@@ -2,15 +2,13 @@
 import { Logo } from "@/components/logo"
 import Link from "next/link"
 import { UserButton } from "@/components/protected/user-button"
-import { User } from "next-auth"
 import { usePathname } from "next/navigation"
-import { Button } from "../ui/button"
-import { HamburgerMenuIcon } from "@radix-ui/react-icons"
-import { ChatSideBar } from "../chat/chat-sidebar"
+import { ChatSideBar } from "@/components/chat/chat-sidebar"
 import { Chat } from "@prisma/client"
+import { ExtendedUser } from "@/next-auth"
 
 interface ProtectedNavbarProps {
-  user?: User
+  user?: ExtendedUser
   chats?: Chat[]
 }
 export const ProtectedNavbar = ({ user,chats }: ProtectedNavbarProps) => {

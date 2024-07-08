@@ -1,10 +1,12 @@
 import { TryNavbar } from "@/components/try/navbar"
+import { currentUser } from "@/lib/auth"
 
 
 interface tryLayoutProps {
   children: React.ReactNode
 }
-const TryLayout = ({ children }: tryLayoutProps) => {
+const TryLayout = async ({ children }: tryLayoutProps) => {
+  const user = await currentUser()
   return (
     <div className="min-h-screen">
       <div className="sticky top-0 z-[2] bg-background">

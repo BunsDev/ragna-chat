@@ -21,12 +21,12 @@ export const {
                 where: { id: user.id },
                 data: { emailVerified: new Date() }
             })
-            sendVerificationSuccessEmail(user?.email!)
+            await sendVerificationSuccessEmail(user?.email!)
         }
     },
     callbacks: {
         async signIn({ user, account }) {
-            if(account?.type !== "credentials") return true
+            if (account?.type !== "credentials") return true
 
             const exisitingUser = await findUserById(user.id!)
 
@@ -39,11 +39,11 @@ export const {
                 session.user.id = token.sub
             }
 
+
             if (session.user) {
                 session.user.name = token.name
                 session.user.email = token.email
             }
-
             return session
         },
         async jwt({ token }) {
@@ -58,7 +58,6 @@ export const {
             token.isOAuth = !!existingAccount
             token.name = exisitingUser.name
             token.email = exisitingUser.email
-
             return token
         }
     },

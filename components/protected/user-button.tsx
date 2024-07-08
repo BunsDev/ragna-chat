@@ -1,15 +1,15 @@
 "use client"
 import { Avatar,AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { HelpCircle, Settings, User as UserIcon } from "lucide-react"
-import { User } from "next-auth"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { ExitIcon } from "@radix-ui/react-icons"
+import { DashboardIcon, ExitIcon } from "@radix-ui/react-icons"
 import { signOut } from "next-auth/react"
 import Link from "next/link"
+import { ExtendedUser } from "@/next-auth"
 
 interface UserButtonProps {
-    user?: User
+    user?: ExtendedUser
 }
 export const UserButton = ({ user }: UserButtonProps) => {
     return (
@@ -23,6 +23,7 @@ export const UserButton = ({ user }: UserButtonProps) => {
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                {user?.role === "ADMIN" && (<DropdownMenuItem asChild><Link href={"/dashboard"} className="flex gap-x-2" ><DashboardIcon height={24} width={24}/>Dashboard</Link></DropdownMenuItem>)}
                 <DropdownMenuItem asChild><Link href={"/settings"} className="flex gap-x-2" ><Settings/>Settings</Link></DropdownMenuItem>
                 <DropdownMenuItem asChild><Link href={"/faq"} className="flex gap-x-2" ><HelpCircle/>Help</Link></DropdownMenuItem>
                 <DropdownMenuSeparator />

@@ -31,8 +31,10 @@ export const getVerificationTokenByToken = async (token: string) => {
 }
 
 export const getAllChatsByUserId = async (userId: string) => {
-    return await db.chat.findMany({ where: { userId },
-        orderBy: { updatedAt: 'desc' } })
+    return await db.chat.findMany({
+        where: { userId },
+        orderBy: { updatedAt: 'desc' }
+    })
 }
 
 export const getChatById = async (id: string) => {
@@ -48,7 +50,7 @@ export const getMessagesByChatId = async (chatId: string) => {
         return await db.message.findMany({
             where: { chatId },
             select: {
-                id:true,
+                id: true,
                 role: true,
                 content: true
             }
@@ -71,7 +73,7 @@ export const getTrialMessagesByChatId = async (chatId: string) => {
         return await db.trialMessage.findMany({
             where: { chatId },
             select: {
-                id:true,
+                id: true,
                 role: true,
                 content: true
             }
