@@ -21,6 +21,21 @@ To use the Ragna.Day project, follow these steps:
     npm install
     ```
 
+## Folder Structure
+The Ragna.Day project follows the following folder structure:
+
+- `app`: Contains different layouts based on permissions.
+- `components`: Contains reusable components.
+- `schemas`: Contains Zod schemas for data validation.
+- `actions`: Contains server actions.
+-  `prisma` : Contains db schema
+- `lib`: All initializations of objects required in the project
+- `data` : All reusable functions for db query fetching
+
+This structure helps organize the project and makes it easier to navigate and locate specific files based on their functionality.
+
+
+
 ## Configuration
 Before running the project, you need to configure the following:
 
