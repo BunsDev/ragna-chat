@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "Generate Trial Chat Page",
 }
 
+export const runtime = 'edge'
+
 const TryPage = async () => {
   const newTrialChat = await db.trialChat.create({data:{}})
   if (newTrialChat) return redirect(`/try/chat/${newTrialChat.id}`)

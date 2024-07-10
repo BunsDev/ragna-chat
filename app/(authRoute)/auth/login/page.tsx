@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Login Page",
 }
 
+export const runtime = 'edge'
+
 const LoginPage = () => {
   return (
     <section>

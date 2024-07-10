@@ -10,6 +10,8 @@ export const metadata: Metadata = {
     description: "Chat Page",
 }
 
+export const runtime = 'edge'
+
 interface ChatPageProps {
     params: { chatId: string }
 }

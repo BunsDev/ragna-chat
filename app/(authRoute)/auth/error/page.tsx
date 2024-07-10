@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: "Auth Error Page",
 }
 
+export const runtime = 'edge'
+
 const AuthErrorPage = () => {
   return (
     <div className="min-h-screen flex justify-center items-center">

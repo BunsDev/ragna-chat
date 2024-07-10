@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "New Verification Page",
 }
 
+export const runtime = 'edge'
+
 const NewVerificationPage = () => {
   return (
     <div className="min-h-screen flex justify-center items-center">

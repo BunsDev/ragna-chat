@@ -6,9 +6,14 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { ModelDropdown } from "@/components/chat/model-dropdown"
 
+
+export const runtime = 'edge'
+
+
 const HomePage = async () => {
   const user = await currentUser()
   const chats = await getAllChatsByUserId(user?.id!)
+
 
   return (
     <section className="gridbg flex justify-center">
