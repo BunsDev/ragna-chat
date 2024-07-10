@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button"
 import { DashboardIcon, ExitIcon } from "@radix-ui/react-icons"
 import { signOut } from "next-auth/react"
 import Link from "next/link"
-import { ExtendedUser } from "@/next-auth"
+import { User } from "next-auth"
 
 interface UserButtonProps {
-    user?: ExtendedUser
+    user?: User
 }
 export const UserButton = ({ user }: UserButtonProps) => {
     return (
@@ -23,7 +23,6 @@ export const UserButton = ({ user }: UserButtonProps) => {
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {user?.role === "ADMIN" && (<DropdownMenuItem asChild><Link href={"/dashboard"} className="flex gap-x-2" ><DashboardIcon height={24} width={24}/>Dashboard</Link></DropdownMenuItem>)}
                 <DropdownMenuItem asChild><Link href={"/settings"} className="flex gap-x-2" ><Settings/>Settings</Link></DropdownMenuItem>
                 <DropdownMenuItem asChild><Link href={"/faq"} className="flex gap-x-2" ><HelpCircle/>Help</Link></DropdownMenuItem>
                 <DropdownMenuSeparator />
