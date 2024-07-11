@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     description: "Settings Page",
   }
 
-export const runtime = 'edge'
+// export const runtime = 'edge'
 
 const SettingsPage = async () => {
     const user = await currentUser()

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { ModelDropdown } from "@/components/chat/model-dropdown"
 
 
-export const runtime = 'edge'
+// export const runtime = 'edge'
 
 
 const HomePage = async () => {

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Auth Error Page",
 }
 
-export const runtime = 'edge'
+// export const runtime = 'edge'
 
 const AuthErrorPage = () => {
   return (
