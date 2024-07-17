@@ -1,6 +1,6 @@
-import { getVerificationTokenByEmail } from '@/data';
+import { getVerificationTokenByEmail } from '@/data'
 import { v4 as uuidv4 } from 'uuid'
-import { db } from '@/lib/db';
+import { db } from '@/lib/db'
 
 export const generateVerificationToken = async (email: string) => {
     try {
@@ -12,7 +12,6 @@ export const generateVerificationToken = async (email: string) => {
 
             if (existingToken) {
                 await db.verificationToken.delete({ where: { id: existingToken.id } })
-                console.log("token deleted")
             }
 
             await db.verificationToken.create({
