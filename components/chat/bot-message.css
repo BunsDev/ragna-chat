@@ -20,37 +20,37 @@
 }
 
 
-tr {
+.prose tr {
     border-top: 1px solid #c6cbd1;
     background: #fff;
   }
   
-  th,
-  td {
+  .prose th,
+  .prose td {
     padding: 6px 13px;
     border: 1px solid #dfe2e5;
   }
   
-  table tr:nth-child(2n) {
+  .prose table tr:nth-child(2n) {
     background: #f6f8fa;
   }
 
   @media (prefers-color-scheme: dark) {
-    tr {
+  .prose tr {
       border-top: 1px solid #4a4a4a;
       background: #333;
     }
   
-    th,
-    td {
+    .prose th,
+    .prose td {
       padding: 6px 13px;
       border: 1px solid #555;
     }
   
-    table tr:nth-child(2n) {
+    .prose table tr:nth-child(2n) {
       background: #444;
     }
-    table{
+    .prose table{
         margin-top:1.5rem;
         margin-bottom:1.5rem;
     }
