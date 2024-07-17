@@ -41,7 +41,7 @@ export const BotMessage = ({ children, live = false, }: BotMessageProps) => {
                 )}
             </span>
             <MarkdownRMD
-                className={"text-wrap"}
+                className={"text-wrap prose"}
                 remarkPlugins={[remarkGfm]}
                 components={{
                     code(props) {
