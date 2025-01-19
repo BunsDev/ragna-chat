@@ -1,26 +1,25 @@
-import type { Metadata } from "next"
-import { Inter as FontSans } from "next/font/google"
-import "./globals.css"
-import { cn } from "@/lib/utils"
-import { siteConfig } from "@/config"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/toaster"
-import { auth } from "@/auth"
-import { SessionProvider } from "next-auth/react"
-import { Provider as JotaiProvider } from "jotai"
-import { GoogleAnalytics } from '@next/third-parties/google'
-import { redirect } from "next/navigation"
+import type { Metadata } from "next";
+import { Inter as FontSans } from "next/font/google";
+import "./globals.css";
+import { cn } from "@/lib/utils";
+import { siteConfig } from "@/config";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { auth } from "@/auth";
+import { SessionProvider } from "next-auth/react";
+import { Provider as JotaiProvider } from "jotai";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { redirect } from "next/navigation";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
-})
-
+});
 
 export const metadata: Metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
-  keywords:[
+  keywords: [
     "Chatbot",
     "AI Chatbot",
     "Chatbot Development",
@@ -34,11 +33,11 @@ export const metadata: Metadata = {
   ],
   authors: [
     {
-      name: "Mihir Gala",
-      url: "https://mihircodes.me",
+      name: "Ragna",
+      url: "https://ragna.day",
     },
   ],
-  creator: "Mihir Gala",
+  creator: "Ragna",
   metadataBase: new URL(siteConfig.url!),
   openGraph: {
     type: "website",
@@ -53,27 +52,32 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
-    creator: "@mihiirgala",
+    creator: "@ragnaday",
   },
   icons: {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
-    icon:"/favicon.ico",
+    icon: "/favicon.ico",
   },
-  manifest:`/manifest.json`,
-}
+  manifest: `/manifest.json`,
+};
 
 interface RootLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const RootLayout = async ({ children }: RootLayoutProps) => {
-  const user = await auth()
+  const user = await auth();
   return (
     <JotaiProvider>
       <SessionProvider session={user}>
         <html lang="en">
-          <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
+          <body
+            className={cn(
+              "min-h-screen bg-background font-sans antialiased",
+              fontSans.variable
+            )}
+          >
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -84,11 +88,11 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
               <Toaster />
             </ThemeProvider>
           </body>
-          <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID!}/>
+          <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID!} />
         </html>
       </SessionProvider>
     </JotaiProvider>
-  )
-}
+  );
+};
 
-export default RootLayout
+export default RootLayout;
