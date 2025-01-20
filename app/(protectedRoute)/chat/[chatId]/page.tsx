@@ -12,11 +12,9 @@ export const metadata: Metadata = {
   description: "Chat Page",
 };
 
-type ChatPageProps = {
-  params: {
-    chatId: string;
-  };
-};
+interface ChatPageProps {
+  params: { chatId: string };
+}
 
 const ChatPage = async ({ params }: ChatPageProps) => {
   const user = await currentUser();
