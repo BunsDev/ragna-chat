@@ -12,28 +12,32 @@ export const metadata: Metadata = {
   description: "Chat Page",
 };
 
-interface ChatPageProps {
+interface PageProps {
   params: { chatId: string };
+  searchParams?: Record<string, string | string[] | undefined>;
 }
 
-const ChatPage = async ({ params }: ChatPageProps) => {
+const ChatPage = async ({ params }: PageProps) => {
   const user = await currentUser();
   const { chatId } = params;
 
-  // Fetching chat details and messages
-  const chat = await getChatById(chatId);
-  const dbMessages = await getMessagesByChatId(chatId);
+  // Parallel data fetching
+  const [chat, dbMessages] = await Promise.all([
+    getChatById(chatId),
+    getMessagesByChatId(chatId),
+  ]);
 
-  // Redirect if chat not found or user doesn't own the chat
-  if (!chat || user?.id !== chat.userId) return redirect("/");
+  // Authorization check
+  if (!chat || user?.id !== chat.userId) {
+    redirect("/");
+  }
 
-  // Return the chat component
   return (
     <div className="md:w-[80%] md:mx-auto">
       <ChatBotComponent
         chatId={chatId}
-        isChatName={!!chat?.name}
-        dbMessages={dbMessages!}
+        isChatName={!!chat.name}
+        dbMessages={dbMessages ?? []}
       />
     </div>
   );
