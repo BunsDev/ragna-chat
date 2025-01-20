@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres
+    container_name: postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: ocelot.builder.4
