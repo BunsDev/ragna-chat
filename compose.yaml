@@ -4,7 +4,8 @@ services:
     container_name: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: ocelot.builder.4
+      - POSTGRES_USER=pguser
+      - POSTGRES_PASSWORD=ocelot.builder.4 #replace with your own new password
     ports:
       - 5432:5432
     volumes:
