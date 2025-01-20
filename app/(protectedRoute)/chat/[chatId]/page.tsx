@@ -12,22 +12,20 @@ export const metadata: Metadata = {
   description: "Chat Page",
 };
 
-interface PageProps {
-  params: { chatId: string };
-  searchParams?: Record<string, string | string[] | undefined>;
+interface ChatPageProps {
+  params: Promise<{ chatId: string }>;
 }
 
-const ChatPage = async ({ params }: PageProps) => {
+const ChatPage = async ({ params }: ChatPageProps) => {
+  const { chatId } = await params;
   const user = await currentUser();
-  const { chatId } = params;
 
-  // Parallel data fetching
-  const [chat, dbMessages] = await Promise.all([
+  // Parallel data fetching like trial version
+  const [chat, messages] = await Promise.all([
     getChatById(chatId),
     getMessagesByChatId(chatId),
   ]);
 
-  // Authorization check
   if (!chat || user?.id !== chat.userId) {
     redirect("/");
   }
@@ -37,7 +35,7 @@ const ChatPage = async ({ params }: PageProps) => {
       <ChatBotComponent
         chatId={chatId}
         isChatName={!!chat.name}
-        dbMessages={dbMessages ?? []}
+        dbMessages={messages ?? []}
       />
     </div>
   );
