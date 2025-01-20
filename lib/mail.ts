@@ -1,25 +1,24 @@
-import sgMail from '@sendgrid/mail';
+import { Resend } from 'resend';
 import { siteConfig } from '@/config';
 
-// Initialize SendGrid with your API key
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+// Initialize Resend with your API key
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
  * Send a verification email with a confirmation link.
+ * @param email - The recipient's email address.
+ * @param token - The verification token.
  */
 export const sendVerificationEmail = async (email: string, token: string) => {
     const confirmLink = `${process.env.BASE_URL}/auth/new-verification?token=${token}`;
 
-    const msg = {
-        to: email,
-        from: `${siteConfig.name} <${process.env.SENDGRID_FROM_EMAIL}>`,
-        subject: 'Confirm your email',
-        html: `<p>Click <a href="${confirmLink}">here</a> to confirm your email.</p>`,
-    };
-
     try {
-        await sgMail.send(msg);
-        console.log('Verification email sent successfully!');
+        await resend.emails.send({
+            from: `${siteConfig.name} <onboarding@resend.dev>`, // Replace with your verified domain later
+            to: email,
+            subject: 'Confirm your email',
+            html: `<p>Click <a href="${confirmLink}">here</a> to confirm your email.</p>`,
+        });
     } catch (error) {
         console.error('Error sending verification email:', error);
     }
@@ -27,18 +26,17 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 
 /**
  * Send a login code email.
+ * @param email - The recipient's email address.
+ * @param token - The login code.
  */
 export const sendLoginCodeEmail = async (email: string, token: string) => {
-    const msg = {
-        to: email,
-        from: `${siteConfig.name} <${process.env.SENDGRID_FROM_EMAIL}>`,
-        subject: 'Login Code',
-        html: `<p>Your login code: <strong>${token}</strong></p>`,
-    };
-
     try {
-        await sgMail.send(msg);
-        console.log('Login code email sent successfully!');
+        await resend.emails.send({
+            from: `${siteConfig.name} <onboarding@resend.dev>`,
+            to: email,
+            subject: 'Login Code',
+            html: `<p>Your Login Code: <strong>${token}</strong></p>`,
+        });
     } catch (error) {
         console.error('Error sending login code email:', error);
     }
@@ -46,56 +44,51 @@ export const sendLoginCodeEmail = async (email: string, token: string) => {
 
 /**
  * Send a delete confirmation code email.
+ * @param email - The recipient's email address.
+ * @param token - The delete confirmation code.
  */
 export const sendDeleteCodeEmail = async (email: string, token: string) => {
-    const msg = {
-        to: email,
-        from: `${siteConfig.name} <${process.env.SENDGRID_FROM_EMAIL}>`,
-        subject: 'Delete Confirmation Code',
-        html: `<p>Your delete confirmation code: <strong>${token}</strong></p>`,
-    };
-
     try {
-        await sgMail.send(msg);
-        console.log('Delete code email sent successfully!');
+        await resend.emails.send({
+            from: `${siteConfig.name} <onboarding@resend.dev>`,
+            to: email,
+            subject: 'Delete Confirmation Code',
+            html: `<p>Your Delete Confirmation Code: <strong>${token}</strong></p>`,
+        });
     } catch (error) {
-        console.error('Error sending delete code email:', error);
+        console.error('Error sending delete confirmation email:', error);
     }
 };
 
 /**
- * Send an email to confirm account verification.
+ * Send a success email after account verification.
+ * @param email - The recipient's email address.
  */
 export const sendVerificationSuccessEmail = async (email: string) => {
-    const msg = {
-        to: email,
-        from: `${siteConfig.name} <${process.env.SENDGRID_FROM_EMAIL}>`,
-        subject: 'Account Verified!',
-        html: `<p>Your account has been successfully verified.</p>`,
-    };
-
     try {
-        await sgMail.send(msg);
-        console.log('Verification success email sent successfully!');
+        await resend.emails.send({
+            from: `${siteConfig.name} <onboarding@resend.dev>`,
+            to: email,
+            subject: 'Account Verified!',
+            html: `<p>Your account has been successfully verified.</p>`,
+        });
     } catch (error) {
         console.error('Error sending verification success email:', error);
     }
 };
 
 /**
- * Send an email to confirm account deletion.
+ * Send a success email after account deletion.
+ * @param email - The recipient's email address.
  */
 export const sendDeleteSuccessEmail = async (email: string) => {
-    const msg = {
-        to: email,
-        from: `${siteConfig.name} <${process.env.SENDGRID_FROM_EMAIL}>`,
-        subject: 'Account Deleted!',
-        html: `<p>Your account has been successfully deleted.</p>`,
-    };
-
     try {
-        await sgMail.send(msg);
-        console.log('Delete success email sent successfully!');
+        await resend.emails.send({
+            from: `${siteConfig.name} <onboarding@resend.dev>`,
+            to: email,
+            subject: 'Account Deleted!',
+            html: `<p>Your account has been successfully deleted.</p>`,
+        });
     } catch (error) {
         console.error('Error sending delete success email:', error);
     }
