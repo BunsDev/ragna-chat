@@ -16,7 +16,6 @@ type ChatPageProps = {
   params: {
     chatId: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 const ChatPage = async ({ params }: ChatPageProps) => {
