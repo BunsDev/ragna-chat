@@ -1,6 +1,8 @@
 import { Message } from "@/components/chat/chat-bot";
 import { openRouter } from "@/lib/openrouter";
 
+export const runtime = 'edge';
+
 if (!process.env.OPENROUTER_API_KEY) throw new Error("Missing OPEN ROUTER API Key");
 
 export const POST = async (req:Request) => {
