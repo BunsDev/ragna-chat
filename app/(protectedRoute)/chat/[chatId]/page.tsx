@@ -16,15 +16,20 @@ type ChatPageProps = {
   params: {
     chatId: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 const ChatPage = async ({ params }: ChatPageProps) => {
   const user = await currentUser();
   const { chatId } = params;
+
+  // Fetching chat details and messages
   const chat = await getChatById(chatId);
   const dbMessages = await getMessagesByChatId(chatId);
+
+  // Redirect if chat not found or user doesn't own the chat
   if (!chat || user?.id !== chat.userId) return redirect("/");
+
+  // Return the chat component
   return (
     <div className="md:w-[80%] md:mx-auto">
       <ChatBotComponent
@@ -35,4 +40,5 @@ const ChatPage = async ({ params }: ChatPageProps) => {
     </div>
   );
 };
+
 export default ChatPage;
