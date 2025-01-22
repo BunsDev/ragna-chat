@@ -8,6 +8,7 @@ Ragna.Day is a multilingual LLM (Language Learning Model) application that utili
 
 - [ ] Fix the react hook related typing errors in components
 - [ ] Fix the resend api code
+- [ ] Decide on cloudflare workers and finalise a dev plan
 
 ## Tech Stack
 
