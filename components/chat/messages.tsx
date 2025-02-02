@@ -48,13 +48,20 @@ export const ChatBotMessages = ({ messages, response,refreshLatest,feedbackLates
                         </div>
                     )
                 }
-                if (message.role === "assistant" && message.content) {
-                    return (
-                        <div key={index} className="w-full">
-                            <BotMessage>{message.content}</BotMessage>
-                        </div>
-                    )
-                }
+                if (message.role === "assistant" && message.content && index === 0) {
+                                    return (
+                                        <div key={index} className="w-full">
+                                            <BotMessage>{message.content + "\\n\\n$E=mc^2$"}</BotMessage>
+                                        </div>
+                                    )
+                                }
+                                if (message.role === "assistant" && message.content) {
+                                    return (
+                                        <div key={index} className="w-full">
+                                            <BotMessage>{message.content}</BotMessage>
+                                        </div>
+                                    )
+                                }
             })}
             {response && (
                 <div className="w-full">
